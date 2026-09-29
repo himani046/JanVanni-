@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JanVaani AI | जनवाणी AI</title>
+  <meta name="description" content="Multilingual AI citizen grievance and municipal response platform for Madhya Pradesh." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <header class="topbar">
+    <a class="brand" href="#home"><span class="brand-mark">ज</span><span><strong>JanVaani <em>AI</em></strong><small>जनवाणी • Citizen Voice, Government Action</small></span></a>
+    <nav>
+      <a class="active" href="#home">Home <i>होम</i></a>
+      <a href="#report">Report <i>शिकायत दर्ज करें</i></a>
+      <a href="#track">My Complaints <i>मेरी शिकायतें</i></a>
+      <a href="#dashboard">Command Center <i>कमांड सेंटर</i></a>
+    </nav>
+    <button id="langToggle" class="glass-btn">हिं</button>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">MULTILINGUAL • MULTIMODAL • MP LOCAL GOVERNANCE</div>
+        <h1>Your voice becomes<br><span>government action.</span></h1>
+        <p>Speak naturally in Hindi, Bundelkhandi, Malvi, Nimadi or English. JanVaani understands the complaint, verifies the evidence, finds the responsible authority and lets citizens track the outcome.</p>
+        <div class="hero-actions">
+          <button class="primary" id="startVoice">🎙 Speak a complaint <span>शिकायत बोलें</span></button>
+          <a class="secondary" href="#report">📷 Upload photo <span>फोटो अपलोड करें</span></a>
+        </div>
+        <div class="language-pills"><span>हिंदी</span><span>Bundelkhandi</span><span>Malvi</span><span>Nimadi</span><span>English</span></div>
+      </div>
+      <div class="hero-orb">
+        <div class="orb-ring ring1"></div><div class="orb-ring ring2"></div>
+        <div class="voice-orb" id="voiceOrb"><span>🎙</span><b>BOLO</b><small>बोलें</small></div>
+        <div class="floating-card card-a"><strong>AI understood</strong><span>सड़क में बड़ा गड्ढा</span></div>
+        <div class="floating-card card-b"><strong>Ward detected</strong><span>वार्ड 22 • इंदौर</span></div>
+      </div>
+    </section>
+
+    <section class="stats-strip">
+      <div><strong>18</strong><span>Local issue categories<br>स्थानीय समस्या श्रेणियाँ</span></div>
+      <div><strong>5</strong><span>Supported speech modes<br>भाषा / बोली सपोर्ट</span></div>
+      <div><strong>30m</strong><span>Incident dedup radius<br>डुप्लीकेट पहचान</span></div>
+      <div><strong>24×7</strong><span>Citizen status access<br>स्थिति जानकारी</span></div>
+    </section>
+
+    <section class="section" id="report">
+      <div class="section-heading"><div><div class="eyebrow">SMART REPORTING</div><h2>One complaint. Every input.</h2><p>एक शिकायत • आवाज़, फोटो, GPS और टेक्स्ट — सब साथ।</p></div><span class="section-chip">AI TRIAGE</span></div>
+      <div class="report-grid">
+        <div class="report-card voice-card">
+          <div class="card-top"><span class="icon">🎙</span><span class="status-dot">LIVE READY</span></div>
+          <h3>Talk to Saathi</h3>
+          <p>Describe the problem in your own words. The assistant can ask follow-up questions instead of rejecting vague complaints.</p>
+          <div class="quote">“हमार गली मा पानी भर गवा है…”<small>Dialect → structured complaint</small></div>
+          <button class="primary compact" id="openChat">Talk now <span>बात करें</span></button>
+        </div>
+        <div class="report-card">
+          <div class="card-top"><span class="icon">📷</span><span class="mini-label">COMPUTER VISION</span></div>
+          <h3>Upload visual evidence</h3>
+          <p>Detect potholes, garbage, waterlogging, streetlight faults and other municipal hazards from images.</p>
+          <label class="upload-box"><input id="imageInput" type="file" accept="image/*"><span>＋</span><b>Drop / upload photo</b><small>Photo • GPS • timestamp metadata</small></label>
+          <div id="imagePreview" class="preview hidden"></div>
+        </div>
+        <div class="report-card">
+          <div class="card-top"><span class="icon">📍</span><span class="mini-label">GEO ROUTING</span></div>
+          <h3>Find the right authority</h3>
+          <p>GPS + ward boundary + issue category determine the routing chain: Nagar Palika, Nagar Nigam, PWD, water, sanitation, electricity or emergency services.</p>
+          <div class="route-preview"><span>📍 Current location</span><span>↓</span><span>Ward boundary</span><span>↓</span><strong>Responsible department</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark-section">
+      <div class="section-heading"><div><div class="eyebrow">LIVE MP MAP</div><h2>From location to action.</h2><p>लोकेशन से शिकायत तक — एक ही दृश्य में।</p></div><span class="section-chip green">GEO + HEATMAP</span></div>
+      <div class="map-layout">
+        <div class="map-panel">
+          <div class="map-toolbar"><span>MP • Live civic incidents</span><div><button data-filter="all" class="filter active">All</button><button data-filter="road" class="filter">Road</button><button data-filter="water" class="filter">Water</button><button data-filter="waste" class="filter">Waste</button></div></div>
+          <div class="map-canvas" id="mapCanvas">
+            <div class="mp-shape"></div><div class="hotspot h1"></div><div class="hotspot h2"></div><div class="hotspot h3"></div><div class="hotspot h4"></div>
+            <div class="map-label indore">Indore<span>23 reports</span></div><div class="map-label bhopal">Bhopal<span>17 reports</span></div><div class="map-label ujjain">Ujjain<span>11 reports</span></div><div class="map-label rewa">Rewa<span>8 reports</span></div>
+            <div class="you">◉<span>You are here</span></div>
+          </div>
+        </div>
+        <aside class="map-side">
+          <div class="metric"><small>OPEN INCIDENTS</small><strong>59</strong><span>+8 today</span></div>
+          <div class="metric"><small>HIGH PRIORITY</small><strong class="orange">12</strong><span>SLA at risk</span></div>
+          <div class="metric"><small>RESOLVED TODAY</small><strong class="green-txt">21</strong><span>Verified by AI</span></div>
+          <div class="legend"><b>Issue heatmap</b><span><i class="dot road"></i>Road</span><span><i class="dot water"></i>Water</span><span><i class="dot waste"></i>Waste</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="track">
+      <div class="section-heading"><div><div class="eyebrow">CITIZEN TRACKING</div><h2>Know what happened next.</h2><p>शिकायत की पूरी टाइमलाइन और अनुमानित समाधान समय देखें।</p></div></div>
+      <div class="complaint-layout">
+        <div class="timeline-card">
+          <div class="ticket-head"><div><small>MASTER INCIDENT</small><h3>JV-IND-0482</h3></div><span class="priority high">HIGH • उच्च</span></div>
+          <div class="ticket-meta"><span>📍 Vijay Nagar, Indore</span><span>🛣 Road hazard</span><span>👥 23 citizen reports</span></div>
+          <div class="progress"><span style="width:73%"></span></div>
+          <div class="steps">
+            <div class="done"><i>✓</i><b>Received</b><small>शिकायत प्राप्त</small></div>
+            <div class="done"><i>✓</i><b>AI Verified</b><small>AI ने सत्यापित किया</small></div>
+            <div class="done"><i>✓</i><b>Ward Assigned</b><small>वार्ड को सौंपा</small></div>
+            <div class="current"><i>●</i><b>Inspection</b><small>निरीक्षण जारी</small></div>
+            <div><i>○</i><b>Resolution</b><small>समाधान</small></div>
+          </div>
+        </div>
+        <div class="eta-card"><span class="eyebrow">PREDICTED ETA</span><strong>~ 18 hrs</strong><span>for next field action</span><div class="risk-bar"><i style="width:68%"></i></div><small>68% SLA risk • escalates at threshold</small><hr><b>Assigned department</b><p>Indore Municipal Corporation<br>Road Maintenance • Ward 22</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="dashboard">
+      <div class="section-heading"><div><div class="eyebrow">COMMAND CENTER</div><h2>Municipal action, not just ticketing.</h2><p>अधिकारी डैशबोर्ड: प्राथमिकता, SLA, वार्ड और समाधान प्रमाण।</p></div><span class="section-chip">OFFICER VIEW</span></div>
+      <div class="command-grid">
+        <div class="command-card large"><div class="command-title"><span>⚠</span><b>SLA risk queue</b><small>आज की प्राथमिकता</small></div><div class="queue"><div><span class="risk high">HIGH</span><b>Waterlogging • Ward 9</b><em>91% risk</em></div><div><span class="risk med">MED</span><b>Pothole • Ward 22</b><em>68% risk</em></div><div><span class="risk med">MED</span><b>Garbage • Ward 14</b><em>54% risk</em></div></div></div>
+        <div class="command-card"><div class="command-title"><span>🧠</span><b>AI triage</b></div><div class="ai-card"><strong>Pothole severity</strong><div class="score">4.2 <small>/ 5</small></div><p>Heavy traffic corridor • deep cavity • two-wheeler hazard</p></div></div>
+        <div class="command-card"><div class="command-title"><span>✅</span><b>Proof of resolution</b></div><div class="before-after"><div><span>BEFORE</span><div class="mini-photo before"></div></div><div class="arrow">→</div><div><span>AFTER</span><div class="mini-photo after"></div></div></div><p class="verified">AI comparison: 94% match • repair likely complete</p></div>
+      </div>
+    </section>
+
+    <section class="section categories">
+      <div class="section-heading"><div><div class="eyebrow">LOCAL SERVICE COVERAGE</div><h2>What can JanVaani route?</h2><p>नगरपालिका स्तर की आम शिकायतें — सही विभाग तक।</p></div></div>
+      <div class="category-grid" id="categoryGrid"></div>
+    </section>
+  </main>
+
+  <div id="chatPanel" class="chat-panel">
+    <div class="chat-head"><div><strong>Saathi • साथी</strong><small>Multilingual civic assistant</small></div><button id="closeChat">✕</button></div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="quick-row"><button>शिकायत की स्थिति?</button><button>कितना समय लगेगा?</button><button>नई शिकायत दर्ज करें</button></div>
+    <div class="chat-input"><button id="micBtn" title="Speak">🎙</button><input id="chatInput" placeholder="Type or speak… / लिखें या बोलें…"><button id="sendBtn">➤</button></div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
