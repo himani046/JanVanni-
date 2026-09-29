@@ -1,0 +1,20 @@
+[
+{"id":"ROAD_POTHOLE","label":"Pothole","hi":"गड्ढा","authority":"Municipal Road Maintenance / PWD"},
+{"id":"ROAD_WATERLOGGING","label":"Waterlogging","hi":"जलभराव","authority":"Municipal Corporation / Drainage"},
+{"id":"GARBAGE","label":"Garbage accumulation","hi":"कचरा","authority":"Sanitation / Solid Waste Management"},
+{"id":"STREETLIGHT","label":"Streetlight fault","hi":"स्ट्रीट लाइट खराब","authority":"Electrical / Streetlight Cell"},
+{"id":"DRAIN_BLOCKAGE","label":"Blocked drain","hi":"नाली जाम","authority":"Drainage / Sanitation"},
+{"id":"WATER_SUPPLY","label":"Water supply interruption","hi":"जल आपूर्ति बाधित","authority":"Water Works"},
+{"id":"SEWER_LEAK","label":"Sewer leak / overflow","hi":"सीवर रिसाव / ओवरफ्लो","authority":"Sewerage / Water Works"},
+{"id":"ILLEGAL_DUMPING","label":"Illegal dumping","hi":"अवैध कचरा फेंकना","authority":"Sanitation / Enforcement"},
+{"id":"TRAFFIC_SIGNAL","label":"Traffic signal fault","hi":"ट्रैफिक सिग्नल खराब","authority":"Traffic / Municipal Electrical"},
+{"id":"ROAD_OBSTRUCTION","label":"Road obstruction","hi":"सड़क अवरोध","authority":"Municipal Enforcement / Traffic"},
+{"id":"ILLEGAL_CONSTRUCTION","label":"Illegal construction","hi":"अवैध निर्माण","authority":"Town & Country Planning / Municipal"},
+{"id":"TREE_HAZARD","label":"Dangerous tree / branch","hi":"खतरनाक पेड़","authority":"Horticulture / Municipal"},
+{"id":"PARK_MAINTENANCE","label":"Park maintenance","hi":"पार्क रखरखाव","authority":"Horticulture / Parks"},
+{"id":"STRAY_ANIMALS","label":"Stray animals","hi":"आवारा पशु","authority":"Municipal Animal Control"},
+{"id":"NOISE_NUISANCE","label":"Public noise nuisance","hi":"शोर / सार्वजनिक परेशानी","authority":"Municipal / Local enforcement"},
+{"id":"FIRE_EMERGENCY","label":"Fire / emergency","hi":"आग / आपातकाल","authority":"Fire & Emergency Services"},
+{"id":"PUBLIC_INFRA","label":"Public infrastructure damage","hi":"सार्वजनिक ढांचा","authority":"Municipal Engineering"},
+{"id":"CLEANLINESS","label":"Public cleanliness","hi":"सार्वजनिक सफाई","authority":"Sanitation"}
+]
