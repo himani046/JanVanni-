@@ -1,60 +1,110 @@
 # JanVaani AI (जनवाणी AI)
 
-JanVaani is a multilingual, multimodal citizen grievance platform designed for local urban governance in Madhya Pradesh.
+**Voice-first multilingual citizen grievance redressal for Madhya Pradesh.**
 
-## Vision
+JanVaani is designed around one simple interaction: **the citizen speaks, JanVaani listens, understands the request, and answers back in voice.** It is intentionally not built as a chat-window-first experience.
 
-Let a citizen speak naturally in **Hindi, Bundelkhandi, Malvi, Nimadi or English**, attach a photo, share/derive location and receive a complaint that is intelligently classified, geographically routed and trackable.
+## What changed in the voice-first frontend
 
-## MVP modules
+- 🎙️ **Saathi Voice Bot** — no chat bubbles and no text input in the citizen assistant.
+- 🗣️ **Speak → understand → speak back** — browser Speech Recognition captures the citizen's speech and Speech Synthesis gives a spoken response.
+- 🇮🇳 **Hindi + English voice modes** with a structure ready for Indic dialect/ASR adapters.
+- 🔊 **Human-style response playback** with a selected browser voice, controlled speaking rate and a visible speaking state.
+- 📌 **Complaint status by voice** — e.g. “मेरी रिपोर्ट दर्ज करी थी, उसकी क्या स्थिति है?” returns a spoken status response.
+- 🧭 **Status / ETA / department / new complaint intents** are supported in the demo voice flow.
+- 📷 **Photo evidence** remains available alongside voice reporting.
+- 🗺️ **Citizen tracking, civic map and officer command center** remain part of the frontend.
 
-- 🎙️ **Saathi Voice Assistant** — conversational complaint intake with follow-up questions and browser speech recognition.
-- 🌐 **Bilingual / multilingual UI** — English + Hindi across the citizen experience, with a structure ready for additional MP dialect content.
-- 📷 **Computer Vision evidence intake** — photo upload surface for potholes, garbage, waterlogging, streetlights and other civic issues.
-- 📍 **GPS + Ward routing** — architecture for mapping the incident to a ward and responsible authority.
-- 🧠 **AI triage** — severity, category, urgency and structured complaint extraction.
-- 🧩 **Incident deduplication** — master incidents can absorb nearby semantically similar complaints.
-- ⏱️ **SLA risk** — prioritize cases before breach and support escalation workflows.
-- 🗺️ **Live MP command map** — incident hotspots, filters and citizen location context.
-- ✅ **Proof of resolution** — before/after evidence workflow for AI-assisted closure verification.
-- 🏛️ **Command Center** — officer queue, risk, AI severity and closure verification.
+## Voice flow
 
-## Important
+~~~text
+Citizen speaks
+      ↓
+Browser Speech Recognition
+      ↓
+Voice intent + complaint context
+      ↓
+FastAPI /api/v1/voice/respond
+      ↓
+Spoken response text
+      ↓
+Browser Speech Synthesis
+      ↓
+Citizen hears the answer
+~~~
 
-This repository currently contains a **frontend MVP / demo layer**. Browser speech recognition and visual upload UI are implemented, while production integrations such as Bhashini/AI4Bharat ASR, vision inference, PostGIS, reverse geocoding, authority APIs/webhooks, messaging gateways and real SLA models should be connected through the backend.
+If the backend is unavailable, the frontend has a local fallback so the voice demo still works.
 
-## Suggested production architecture
+## Current demo vs production
 
-```
-Citizen Voice / Text / Photo / GPS
-          ↓
-Indic ASR + language detection
-          ↓
-LLM normalization + structured entities
-          ↓
-Vision model + EXIF/GPS validation
-          ↓
-Embeddings + PostGIS deduplication
-          ↓
-Ward / authority routing engine
-          ↓
-SLA prediction + escalation
-          ↓
-Officer Command Center
-          ↓
-Proof-of-resolution + citizen notification
-```
+The repository now has a working **voice-first frontend demo** and a FastAPI voice-response endpoint. The demo response data is deterministic (JV-IND-0482) so it can be demonstrated without external credentials.
+
+For production, connect:
+
+- Bhashini / AI4Bharat or another Indic ASR provider for Hindi, Malvi, Nimadi, Bundeli and other dialects.
+- Neural TTS for natural Indian-language voices.
+- LLM-based intent extraction and response generation.
+- Computer vision inference for uploaded evidence.
+- GPS/EXIF validation + reverse geocoding.
+- PostGIS + embeddings for spatial/semantic duplicate clustering.
+- Ward/authority routing APIs.
+- Real SLA prediction and escalation.
+- Citizen notifications and proof-of-resolution verification.
 
 ## Run locally
 
-Open `index.html` directly, or serve the folder using any static server:
+### Frontend
 
-```bash
-python -m http.server 5500
-```
+~~~bash
+python3 -m http.server 5500
+~~~
 
-Then open `http://localhost:5500`.
+Open:
 
-## Backend blueprint
+~~~text
+http://localhost:5500
+~~~
 
-See `backend/README.md` for proposed FastAPI endpoints and provider adapter architecture.
+Allow microphone permission when the browser asks.
+
+### Backend
+
+In a second VS Code terminal:
+
+~~~bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+~~~
+
+Check:
+
+~~~text
+http://127.0.0.1:8000/health
+http://127.0.0.1:8000/docs
+~~~
+
+The frontend automatically tries the local FastAPI voice endpoint first and falls back to its local demo response if the API is unavailable.
+
+## Repository structure
+
+~~~text
+JanVanni-/
+├── index.html
+├── styles.css
+├── app.js
+├── backend/
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── README.md
+│   └── .env.example
+└── data/
+    └── mp_issue_catalog.json
+~~~
+
+## Project direction
+
+**Voice first. Government action next.**
+
+The citizen should not have to learn how to use a ticketing system. They should be able to speak naturally, receive a clear spoken answer, and only see detailed dashboards when they want them.
