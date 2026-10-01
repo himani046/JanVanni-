@@ -228,3 +228,52 @@ footer{background:#f3f7fa!important;color:#5f7080!important;border-top:1px solid
 
 /* Keep content readable above heritage montage */
 .section,.hero,.auth-section,.voice-banner,.closing{position:relative;z-index:1}
+
+
+/* =========================================================
+   MP HERITAGE BACKGROUND — VISIBLE GOVERNMENT LIGHT THEME
+   Fix: keep the running monument slideshow above the page canvas,
+   then use translucent white government surfaces for readability.
+   ========================================================= */
+html,body{background:#f7fafc!important}
+body{position:relative;isolation:isolate}
+body:before{display:none!important}
+body:after{
+  z-index:1!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.50))!important;
+}
+.mp-monument-stage{
+  z-index:0!important;
+  background:#eef4f8!important;
+}
+.mp-monument-slide{
+  opacity:0;
+  filter:saturate(.90) contrast(.98) brightness(1.03)!important;
+  transform:scale(1.07);
+  transition:opacity 1.5s ease-in-out,transform 7.5s ease!important;
+}
+.mp-monument-slide.active{opacity:1!important;transform:scale(1)!important}
+.mp-monument-stage:after{
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.48) 48%,rgba(255,255,255,.30) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,.50))!important;
+}
+.gov-strip,.topbar,main,footer,.voice-overlay{position:relative;z-index:3}
+main{background:transparent!important}
+.hero{
+  background:rgba(255,255,255,.34)!important;
+  border-radius:0 0 28px 28px;
+}
+.section,.voice-banner,.closing,.auth-section{
+  background:rgba(255,255,255,.88)!important;
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+.process-card,.pulse-card,.map-card,.ticket-main,.eta-card,.before-after,
+.command-dashboard,.service-card,.auth-card,.gov-panel,.gov-case,.upload-zone,
+.vision-result,.closure-case{
+  background:rgba(255,255,255,.94)!important;
+}
+.gov-strip{background:#f3f7fa!important;color:#263d52!important}
+.topbar{background:rgba(255,255,255,.96)!important}
+footer{background:rgba(243,247,250,.97)!important}
