@@ -93,7 +93,7 @@ def dialect_reply(kind: str, language: str, c=DEMO_COMPLAINT) -> str:
     if lang == "mal-IN":
         if kind == "status":
             return (f"राम राम। थारी शिकायत {c['id']} अभी {c['department']} विभाग में है, "
-                    f"{c['ward']}, {c['city'] में। अभी जगह की जाँच चाल री है। "
+                    f"{c['ward']}, {c['city']} में। अभी जगह की जाँच चाल री है। "
                     f"अगली कार्रवाई करीब {c['next_hours']} घंटा में होसी।")
         if kind == "eta":
             return f"ई शिकायत को निपटारो करीब {c['eta_days']} दिन में होवो है।"
