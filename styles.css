@@ -44,3 +44,187 @@ html{scroll-behavior:smooth}body{background:#11182d;color:#f7f4ef;font-family:"B
 /* Auth screen navigation */
 .signin-section{display:none!important}
 .signin-section:target{display:block!important}
+
+/* =========================================================
+   JANVAANI GOVERNMENT REDESIGN — WHITE + MP HERITAGE
+   Reference: user-supplied video
+   ========================================================= */
+:root{
+  --gov-navy:#12345b;
+  --gov-blue:#1d5d9b;
+  --gov-saffron:#e87817;
+  --gov-green:#2f7d58;
+  --gov-ink:#17324d;
+  --gov-muted:#657487;
+  --gov-line:#dfe7ee;
+  --gov-paper:#ffffff;
+  --gov-soft:#f5f8fb;
+}
+html,body{background:#fff!important;color:var(--gov-ink)!important}
+body{
+  font-family:"Hind","Noto Sans Devanagari",Arial,sans-serif!important;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-20;
+  background:#fff!important;
+  filter:none!important;
+}
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-19;
+  background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(255,255,255,.96))!important;
+  pointer-events:none;
+}
+
+/* Animated Madhya Pradesh monument background */
+.mp-monument-stage{
+  position:fixed;
+  inset:0;
+  z-index:-18;
+  overflow:hidden;
+  pointer-events:none;
+  background:#fff;
+}
+.mp-monument-slide{
+  position:absolute;
+  inset:0;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:0;
+  transform:scale(1.04);
+  transition:opacity 1.2s ease,transform 7s ease;
+  filter:saturate(.72) contrast(.92);
+}
+.mp-monument-slide.active{opacity:1;transform:scale(1)}
+.mp-monument-stage:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.83) 43%,rgba(255,255,255,.68) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.68),rgba(255,255,255,.93));
+}
+
+/* Government masthead */
+.topbar{
+  background:rgba(255,255,255,.97)!important;
+  color:var(--gov-ink)!important;
+  border-bottom:1px solid var(--gov-line)!important;
+  box-shadow:0 3px 18px rgba(22,54,84,.07)!important;
+  backdrop-filter:blur(16px)!important;
+}
+.brand strong,.brand strong em,.topbar nav a,.admin-link{color:var(--gov-ink)!important}
+.brand strong em{color:var(--gov-saffron)!important}
+.brand small,.topbar nav a i,.admin-link i{color:var(--gov-muted)!important}
+.topbar nav a:hover,.topbar nav a.active,.admin-link:hover{color:var(--gov-blue)!important}
+.brand-seal{background:var(--gov-blue)!important;color:#fff!important;border-radius:8px!important}
+.access-btn,.lang-btn{
+  background:#fff!important;
+  color:var(--gov-blue)!important;
+  border:1px solid #cbd8e4!important;
+}
+.lang-btn{color:var(--gov-saffron)!important}
+
+/* Hero — clean white government landing page */
+.hero{
+  min-height:calc(100vh - 74px)!important;
+  background:transparent!important;
+  color:var(--gov-ink)!important;
+}
+.hero:before{
+  display:none!important;
+}
+.hero-copy,.hero-visual{position:relative;z-index:2}
+.official-line{
+  background:#fff!important;
+  border:1px solid #d7e2eb!important;
+  color:var(--gov-blue)!important;
+  box-shadow:0 6px 20px rgba(28,74,112,.06);
+}
+.hero h1,.hero h1 span{color:var(--gov-ink)!important}
+.hero h1 span{color:var(--gov-saffron)!important}
+.hero-copy>p,.trust-row{color:#52667a!important}
+.primary-btn{
+  background:var(--gov-blue)!important;
+  color:#fff!important;
+  box-shadow:0 8px 20px rgba(29,93,155,.18);
+}
+.ghost-btn{
+  background:#fff!important;
+  color:var(--gov-blue)!important;
+  border:1px solid #bfcfdd!important;
+}
+.hero-orb{
+  background:#fff!important;
+  color:var(--gov-blue)!important;
+  border:2px solid var(--gov-saffron)!important;
+  box-shadow:0 0 0 15px rgba(232,120,23,.08),0 20px 55px rgba(35,72,104,.14)!important;
+}
+.floating-card{
+  background:rgba(255,255,255,.94)!important;
+  color:var(--gov-ink)!important;
+  border:1px solid #dbe5ec!important;
+  box-shadow:0 12px 35px rgba(22,54,84,.10)!important;
+}
+.floating-card small{color:var(--gov-saffron)!important}
+
+/* White cards / sections */
+.quick-stats,.process-card,.pulse-card,.map-card,.tracking-shell,.gov-panel,.command-dashboard,
+.voice-banner,.section,.closing,.auth-card{
+  background:rgba(255,255,255,.96)!important;
+  color:var(--gov-ink)!important;
+  border-color:var(--gov-line)!important;
+  box-shadow:0 12px 40px rgba(25,61,91,.07)!important;
+}
+.section-heading h2,.closing h2,.auth-section h2{color:var(--gov-ink)!important}
+.section-heading p,.closing p,.auth-sub{color:var(--gov-muted)!important}
+.quick-stats strong{color:var(--gov-blue)!important}
+.quick-stats span{color:var(--gov-ink)!important}
+.quick-stats small{color:var(--gov-muted)!important}
+.auth-section:before{display:none!important}
+.auth-section{background:#fff!important}
+.auth-kicker{color:var(--gov-blue)!important;border-color:#cbd9e5!important}
+.auth-section h2 span{color:var(--gov-saffron)!important}
+.auth-card{background:#fff!important;border:1px solid #dce5ec!important}
+.auth-field input,.auth-field select{
+  background:#fff!important;color:var(--gov-ink)!important;border-color:#cbd8e4!important;
+}
+.auth-field input:focus,.auth-field select:focus{border-color:var(--gov-blue)!important}
+footer{background:#f3f7fa!important;color:#5f7080!important;border-top:1px solid var(--gov-line)!important}
+
+/* Government portal */
+.gov-kpis>div,.gov-case,.upload-zone,.vision-result,.closure-case{
+  background:#fff!important;border-color:#dce5ec!important;
+}
+.gov-kpis>div strong,.gov-kpis>div b{color:var(--gov-blue)!important}
+.wide-action,.close-action{background:var(--gov-green)!important}
+.outline-action{background:#fff!important;color:var(--gov-blue)!important;border-color:#cbd8e4!important}
+
+/* Voice overlay — government helpdesk style */
+.voice-overlay{background:rgba(11,38,63,.34)!important}
+.voice-sheet{
+  background:#fff!important;
+  color:var(--gov-ink)!important;
+  border:1px solid #dbe5ec!important;
+  box-shadow:0 24px 70px rgba(20,53,82,.22)!important;
+}
+.voice-sheet .reply-panel,.voice-panels>div{
+  background:#f7fafc!important;
+  border-color:#dce6ed!important;
+}
+.listen-orb{
+  background:#fff!important;
+  color:var(--gov-blue)!important;
+  border:2px solid var(--gov-saffron)!important;
+}
+.voice-status,.voice-foot{color:var(--gov-muted)!important}
+
+/* Keep content readable above heritage montage */
+.section,.hero,.auth-section,.voice-banner,.closing{position:relative;z-index:1}
