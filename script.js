@@ -8,6 +8,7 @@
    CONFIG — put your own photos here.
    Save monument photos inside the /images folder and list them, e.g.
      const API_BASE = "https://janvanni-backend.onrender.com";
+const API_BASE = "https://janvanni-backend.onrender.com";
 const BG_IMAGES = [
   "assets/monuments/monument-01.jpg",
   "assets/monuments/monument-02.jpg",
@@ -141,193 +142,146 @@ if ($("tbar")) {
 renderBackground();
 
 /* =====================================================================
-   2. TALK TO SAATHI — scripted chatbot demo
-   Recognises four problem types, asks for the ward, then "files" a
-   complaint with an ID, priority, department and expected time.
-   (No data is sent anywhere. Connect a backend to make it real.)
+   2. TALK TO SAATHI — VOICE-FIRST ASSISTANT
+   No text chat. Citizen speaks -> backend understands -> Saathi speaks back.
    ===================================================================== */
 (() => {
-  const msgs  = $("msgs");
-  const input = $("ci");
+  const orb = $("voice-orb");
+  const talk = $("talk");
+  const stop = $("voice-stop");
+  const state = $("voice-state");
+  const stateHi = $("voice-state-hi");
+  const transcript = $("voice-transcript");
+  const replyBox = $("voice-reply");
+  const langSelect = $("voice-language");
 
-  const CATEGORIES = [
-    { test: /गड्ढ|सड़क|सडक|road|pothole|khadda/i,
-      name: "Road / Pothole", hindi: "सड़क",
-      dept: "PWD & Nagar Nigam Roads", priority: "High", hours: 18 },
-    { test: /पानी|जल|नल|water|नाली|drain|bhar/i,
-      name: "Waterlogging / Water", hindi: "जल",
-      dept: "Water Supply & Drainage", priority: "High", hours: 12 },
-    { test: /कचरा|कूड़ा|गंदगी|garbage|waste|kachra/i,
-      name: "Garbage / Sanitation", hindi: "स्वच्छता",
-      dept: "Sanitation Department", priority: "Medium", hours: 24 },
-    { test: /बिजली|लाइट|light|electric|bijli/i,
-      name: "Streetlight / Electricity", hindi: "बिजली",
-      dept: "Electricity Board", priority: "Medium", hours: 20 },
-  ];
-
-  let step = 0;          // 0 = ask problem, 1 = ask ward, 2 = done
-  let category = null;
-
-  /* Add a chat bubble ("bot" or "me") */
-  function addBubble(text, who) {
-    const bubble = document.createElement("div");
-    bubble.className = "b " + who;
-    bubble.textContent = text;
-    msgs.appendChild(bubble);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  /* Quick-reply chips under the conversation */
-  function showChips(labels) {
-    const box = $("qr");
-    box.innerHTML = "";
-    labels.forEach((label) => {
-      const btn = document.createElement("button");
-      btn.textContent = label;
-      btn.onclick = () => send(label);
-      box.appendChild(btn);
-    });
-  }
-
-  function startChat() {
-    msgs.innerHTML = "";
-    step = 0;
-    category = null;
-    addBubble(
-      "नमस्ते! मैं साथी हूँ। आप अपनी समस्या अपनी भाषा में बताइए।\n" +
-      "Hi! I'm Saathi. Tell me what's wrong in your area.", "bot");
-    showChips(["सड़क में बड़ा गड्ढा", "हमार गली मा पानी भर गवा है",
-               "Garbage not collected", "Streetlight not working"]);
-  }
-
-  async function send(text) {
-    text = text.trim();
-    if (!text) return;
-    addBubble(text, "me");
-    input.value = "";
-    $("qr").innerHTML = "";
-
-    if (step === 0) {
-      try {
-        const res = await fetch(API_BASE + "/api/v1/voice/respond", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({text, language: "hi-IN"})
-        });
-        if (res.ok) {
-          const data = await res.json();
-          addBubble(data.reply_text || "साथी ने आपकी बात समझ ली।", "bot");
-        }
-      } catch (e) {
-        // Keep the local demo fallback below if the API is temporarily unavailable.
-      }
-    }
-
-    setTimeout(() => {
-      if (step === 0) {
-        category = CATEGORIES.find((c) => c.test.test(text));
-        if (!category) {
-          addBubble(
-            "मैं आपकी मदद करना चाहती हूँ। क्या समस्या सड़क, पानी, कचरे या बिजली से जुड़ी है?\n" +
-            "Is it about road, water, garbage or streetlight?", "bot");
-          showChips(["सड़क", "पानी", "कचरा", "बिजली"]);
-          return;
-        }
-        step = 1;
-        addBubble(
-          `समझ गई: ${category.name} (${category.hindi}).\n` +
-          "यह किस इलाके या वार्ड में है? Which area or ward?", "bot");
-        showChips(["विजय नगर, इंदौर", "वार्ड 22", "Use my location"]);
-
-      } else if (step === 1) {
-        step = 2;
-        const id = "JV-IND-" + (1000 + Math.floor(Math.random() * 8999));
-        addBubble(
-          "✅ शिकायत दर्ज हो गई\n\n" +
-          `ID: ${id}\n` +
-          `Subject: ${category.name}\n` +
-          `Location: ${text}\n` +
-          `Priority: ${category.priority}\n` +
-          `Routed to: ${category.dept}\n` +
-          `Expected action: ~${category.hours} hrs\n\n` +
-          'आप "Track" से स्थिति देख सकते हैं।', "bot");
-        showChips(["नई शिकायत / New complaint"]);
-
-      } else {
-        startChat();          // any message after completion restarts
-      }
-    }, 450);
-  }
-
-  /* Open the chat panel. It opens automatically on page load and the
-     "Talk now" button re-opens / focuses it. */
-  function openChat(focus) {
-    const chat = $("chat");
-    chat.classList.add("on");
-    if (!msgs.children.length) startChat();
-    if (focus) {
-      input.focus();
-      chat.scrollIntoView({ block: "nearest" });
-    }
-  }
-
-  $("talk").onclick = () => openChat(true);
-  openChat(false);            // banner is already open when the page loads
-
-  /* ✕ closes the chat panel (Esc works too); "Talk now" opens it again. */
-  const closeChat = () => $("chat").classList.remove("on");
-  $("cx").onclick = closeChat;
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeChat();
-  });
-
-  $("send").onclick = () => send(input.value);
-  input.onkeydown = (e) => { if (e.key === "Enter") send(input.value); };
-
-  /* Voice input (Chrome / Edge / Safari). Hindi by default. */
   const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const mic = $("mc");
-  let rec = null, listening = false;
+  let rec = null;
+  let listening = false;
+  let speaking = false;
+  let stopped = false;
+
+  const languageName = {
+    "hi-IN":"Hindi", "en-IN":"English", "mal-IN":"Malvi",
+    "nim-IN":"Nimadi", "bnd-IN":"Bundelkhandi", "bag-IN":"Bagheli", "gon-IN":"Gondi"
+  };
+
+  function setState(en, hi, mode="") {
+    state.textContent = en;
+    stateHi.textContent = hi;
+    document.body.classList.toggle("saathi-listening", mode === "listening");
+    document.body.classList.toggle("saathi-speaking", mode === "speaking");
+  }
+
+  function speak(text, lang) {
+    if (!("speechSynthesis" in window)) return;
+    speaking = true;
+    setState("Saathi is replying…", "साथी जवाब दे रहा है…", "speaking");
+    replyBox.textContent = text;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang || "hi-IN";
+    u.rate = 0.94;
+    u.pitch = 1.02;
+    u.volume = 1;
+    u.onend = () => {
+      speaking = false;
+      if (!stopped) setState("Your turn — speak now", "अब आपकी बारी है — बोलिए", "");
+    };
+    window.speechSynthesis.speak(u);
+  }
+
+  async function askBackend(text) {
+    try {
+      const res = await fetch(API_BASE + "/api/v1/voice/respond", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({text, language: langSelect.value})
+      });
+      if (!res.ok) throw new Error("API " + res.status);
+      const data = await res.json();
+      return data.reply_text || "जी, आपकी बात समझ गई।";
+    } catch (e) {
+      return "जी, आपकी बात समझ गई। कृपया समस्या और पास की जगह बताइए।";
+    }
+  }
 
   function listen() {
     if (!Recognition) {
-      addBubble("Voice input is not supported in this browser. Please use Chrome or type.", "bot");
+      setState("Voice input is not supported here", "इस ब्राउज़र में voice input उपलब्ध नहीं है");
+      replyBox.textContent = "Please use Chrome or Edge for the live voice experience.";
       return;
     }
-    if (listening) { rec.stop(); return; }          // tap again = stop
+    if (listening || speaking) return;
 
+    stopped = false;
     rec = new Recognition();
-    rec.lang = "hi-IN";                              // use "en-IN" for English
-    rec.interimResults = true;                       // show words while speaking
+    rec.lang = langSelect.value;
+    rec.interimResults = true;
+    rec.continuous = false;
+    rec.maxAlternatives = 1;
 
     rec.onstart = () => {
       listening = true;
-      mic.classList.add("rec");
-      input.placeholder = "Listening… बोलिए";
+      setState("Listening…", "साथी सुन रहा है…", "listening");
+      transcript.textContent = "Listening…";
+      orb.classList.add("active");
     };
-    rec.onresult = (e) => {
-      const text = Array.from(e.results).map((r) => r[0].transcript).join("");
-      input.value = text;                            // live text in the box
-      if (e.results[e.results.length - 1].isFinal) send(text);
+
+    rec.onresult = async (event) => {
+      let finalText = "";
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const part = event.results[i][0].transcript;
+        if (event.results[i].isFinal) finalText += part;
+        else interim += part;
+      }
+      transcript.textContent = finalText || interim || "…";
+      if (!finalText.trim()) return;
+
+      listening = false;
+      orb.classList.remove("active");
+      setState("Understanding…", "साथी आपकी बात समझ रहा है…");
+      const answer = await askBackend(finalText.trim());
+      if (!stopped) speak(answer, langSelect.value);
     };
-    rec.onerror = (e) => addBubble(
-      e.error === "not-allowed"
-        ? "Please allow microphone access in the browser."
-        : "Couldn't hear you. Try again or type.", "bot");
+
+    rec.onerror = () => {
+      listening = false;
+      orb.classList.remove("active");
+      if (!stopped) {
+        setState("I couldn't hear that. Try again.", "आवाज़ साफ़ नहीं आई। फिर से बोलिए।");
+      }
+    };
+
     rec.onend = () => {
       listening = false;
-      mic.classList.remove("rec");
-      input.placeholder = "Type or speak… यहाँ लिखें या बोलें";
+      orb.classList.remove("active");
     };
-    try { rec.start(); } catch (e) {}
+
+    rec.start();
   }
 
-  mic.onclick = listen;
+  function stopAll() {
+    stopped = true;
+    if (rec) try { rec.stop(); } catch(e) {}
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    listening = false;
+    speaking = false;
+    orb.classList.remove("active");
+    setState("Saathi is ready", "साथी तैयार है");
+  }
 
-  /* Used by the hero button, the orb and the report card */
-  window.startVoiceComplaint = () => { openChat(true); listen(); };
+  orb.onclick = listen;
+  talk.onclick = listen;
+  stop.onclick = stopAll;
+  langSelect.onchange = stopAll;
+
+  window.startVoiceComplaint = () => {
+    document.getElementById("saathi").scrollIntoView({behavior:"smooth", block:"center"});
+    setTimeout(listen, 450);
+  };
 })();
-
 /* =====================================================================
    3. UPLOAD VISUAL EVIDENCE
    The citizen adds a photo, picks the issue type and (optionally) adds
