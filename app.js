@@ -1,208 +1,53 @@
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const services=[["🛣️","Road / Potholes","सड़क / गड्ढे"],["💧","Water Supply","जल आपूर्ति"],["🗑️","Garbage","कचरा / स्वच्छता"],["💡","Streetlights","स्ट्रीट लाइट"],["🚰","Drainage","नाली / जल निकासी"],["⚡","Electricity","बिजली"],["🌧️","Waterlogging","जलभराव"],["🚦","Traffic Signals","ट्रैफिक सिग्नल"],["🌳","Trees & Parks","पेड़ / पार्क"],["🏗️","Construction","निर्माण"],["🐕","Stray Animals","आवारा पशु"],["🧹","Cleanliness","सार्वजनिक सफाई"],["🔥","Emergency","आपातकाल"],["🛑","Road Obstruction","सड़क अवरोध"],["📢","Noise Nuisance","शोर / परेशानी"],["🏚️","Infrastructure","सार्वजनिक ढांचा"],["🚛","Waste Transport","कचरा परिवहन"],["🛶","Flooding","बाढ़"]];
-$("#serviceGrid").innerHTML=services.map(c=>'<div class="service"><div>'+c[0]+'</div><b>'+c[1]+'</b><small>'+c[2]+'</small></div>').join("");
-function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2300)}
-$$(".reveal").forEach(el=>{new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("in")}),{threshold:.08}).observe(el)});
-$$("nav a").forEach(a=>a.addEventListener("click",()=>$$("nav a").forEach(n=>n.classList.toggle("active",n===a))));
-$$("[data-scroll]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.scroll)?.scrollIntoView({behavior:"smooth"})));
-let countersStarted=false;new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting||countersStarted)return;countersStarted=true;$$("[data-count]").forEach(el=>{const target=+el.dataset.count;let n=0;const step=Math.max(1,Math.ceil(target/50));const timer=setInterval(()=>{n=Math.min(target,n+step);el.textContent=target>1000?n.toLocaleString():n;if(n>=target)clearInterval(timer)},24)})})},{threshold:.5}).observe($(".quick-stats"));
-$("#imageInput")?.addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const url=URL.createObjectURL(f),p=$("#imagePreview");p.classList.remove("hidden");p.innerHTML='<img src="'+url+'" alt="Uploaded civic evidence"><small style="display:block;padding:5px;font-size:9px;color:#777487">Evidence received • vision inference hook ready</small>';toast("फोटो evidence जोड़ दिया गया")});
-$$(".map-filters button").forEach(btn=>btn.addEventListener("click",()=>{$$(".map-filters button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");toast(btn.textContent+" incidents selected")}));
-$$(".map-pin").forEach(pin=>pin.addEventListener("click",()=>toast(pin.dataset.city+" civic incidents selected")));
-$("#accessBtn")?.addEventListener("click",()=>{document.body.classList.toggle("large-type");toast(document.body.classList.contains("large-type")?"Larger text enabled":"Standard text restored")});
-$("#langToggle")?.addEventListener("click",()=>{document.body.classList.toggle("hindi-mode");$("#langToggle").textContent=document.body.classList.contains("hindi-mode")?"EN":"हिं";toast(document.body.classList.contains("hindi-mode")?"Hindi emphasis enabled":"English emphasis enabled")});
+/* =====================================================================
+   JanVaani — shared storage, seed data and page router
+   Data lives in localStorage (demo only). A real deployment needs a
+   backend + database + server-side login for users and officials.
+   ===================================================================== */
 
-/* Voice-first Saathi */
-const overlay=$("#voiceOverlay"),sheet=document.querySelector(".voice-sheet"),listenOrb=$("#listenOrb"),heard=$("#heardText"),spoken=$("#spokenText"),listenLabel=$("#listenLabel"),listenHint=$("#listenHint"),voiceStatus=$("#voiceStatus"),voiceLang=$("#voiceLanguage");
-let recognition=null,isListening=false,lastReply="",selectedLanguage="hi-IN";
-function browserVoiceLocale(lang){return lang||"hi-IN"}
-const complaint={id:"JV-IND-0482",ward:"Ward 22",city:"Indore",department:"Road Maintenance",reports:23,nextHours:18,risk:68,days:4};
-$("#wave").innerHTML=Array.from({length:35},()=>"<i></i>").join("");
-function setVoiceState(state,msg){sheet.classList.toggle("listening",state==="listening");sheet.classList.toggle("speaking",state==="speaking");const c={ready:["Ready to listen · सुनने के लिए तैयार","बोलें","Tap & speak"],listening:["Listening… · सुन रहा हूँ…","सुन रहा हूँ","Stop speaking"],speaking:["Saathi is speaking · साथी जवाब दे रहा है","जवाब","Please listen"],error:["Microphone attention needed","फिर बोलें","Try again"]}[state]||["Ready","बोलें","Tap & speak"];voiceStatus.textContent=state==="speaking"?"● Speaking now":state==="listening"?"● Listening now":"● Ready";listenLabel.textContent=c[1];listenHint.textContent=c[2]}
-function openVoice(){overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");setVoiceState("ready");setTimeout(()=>listenOrb.focus(),80)}
-function closeVoice(){stopSpeaking();stopListening();overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true")}
-$$("[data-voice]").forEach(b=>b.addEventListener("click",openVoice));$("#voiceClose").addEventListener("click",closeVoice);overlay.addEventListener("click",e=>{if(e.target===overlay)closeVoice()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeVoice()});
-function pickVoice(lang){const vs=speechSynthesis.getVoices?speechSynthesis.getVoices():[];return vs.find(v=>v.lang?.toLowerCase()===lang.toLowerCase())||vs.find(v=>v.lang?.toLowerCase().startsWith(lang.slice(0,2)))||vs.find(v=>v.lang?.toLowerCase().startsWith("en-in"))||vs[0]}
-function stopSpeaking(){try{speechSynthesis.cancel()}catch(e){}sheet.classList.remove("speaking")}
-function speak(text,lang=selectedLanguage){lastReply=text;if(!("speechSynthesis"in window)){setVoiceState("ready");return}stopSpeaking();const u=new SpeechSynthesisUtterance(text);const exact=lang||"hi-IN";const voices=speechSynthesis.getVoices?speechSynthesis.getVoices():[];const v=voices.find(x=>x.lang?.toLowerCase()===exact.toLowerCase())||voices.find(x=>x.lang?.toLowerCase().startsWith(exact.slice(0,2).toLowerCase()))||voices.find(x=>x.lang?.toLowerCase().startsWith("hi-in"))||voices.find(x=>x.lang?.toLowerCase().startsWith("hi"))||voices[0];u.lang=exact;u.rate=exact.startsWith("en")?.96:.90;u.pitch=1.02;if(v)u.voice=v;u.onstart=()=>setVoiceState("speaking");u.onend=()=>setVoiceState("ready");u.onerror=()=>setVoiceState("ready");sheet.classList.add("speaking");speechSynthesis.speak(u)}
-function stopListening(){if(recognition){try{recognition.stop()}catch(e){}recognition=null}isListening=false}
-function norm(t){return t.toLowerCase().replace(/[?!.,।]/g," ").replace(/\s+/g," ").trim()}
-function localReply(text){const t=norm(text),hi=selectedLanguage.startsWith("hi")||/[ऀ-ॿ]|शिकायत|रिपोर्ट|स्थिति|विभाग|कब तक|गड्ढा|पानी/.test(t);
-if(/status|स्थिति|रिपोर्ट.*स्थिति|शिकायत.*स्थिति|क्या हुआ|track|ट्रैक/.test(t))return hi?"जी, आपकी शिकायत "+complaint.id+" की स्थिति यह है। यह "+complaint.ward+", "+complaint.city+" में "+complaint.department+" को भेजी गई है और अभी site inspection के चरण में है। अगला action लगभग "+complaint.nextHours+" घंटे में expected है। इस incident से "+complaint.reports+" समान citizen reports जुड़ी हैं और SLA risk "+complaint.risk+" प्रतिशत है।":"Your complaint "+complaint.id+" is with "+complaint.department+", "+complaint.ward+", "+complaint.city+". It is currently in the site inspection stage. The next action is expected in about "+complaint.nextHours+" hours. "+complaint.reports+" similar citizen reports are linked to the same incident and the current SLA risk is "+complaint.risk+" percent.";
-if(/how long|कब तक|कितना समय|कितने दिन|समय|eta|days|दिन/.test(t))return hi?"इस तरह की शिकायत के लिए अनुमानित resolution time लगभग "+complaint.days+" दिन है। अभी अगला field action लगभग "+complaint.nextHours+" घंटे में expected है।":"The estimated resolution time is around "+complaint.days+" days. The next field action is expected in about "+complaint.nextHours+" hours.";
-if(/department|विभाग|कौन.*देख|कौन.*जिम्मेदार|officer|अधिकारी/.test(t))return hi?"आपकी शिकायत "+complaint.department+" विभाग के पास है, "+complaint.ward+", "+complaint.city+" में। JanVaani location और issue type के आधार पर इसे responsible civic authority तक route करता है।":"Your complaint is assigned to "+complaint.department+", "+complaint.ward+", "+complaint.city+". JanVaani uses location and issue type to route it to the responsible civic authority.";
-if(/report|नई शिकायत|शिकायत दर्ज|register|दर्ज कर|problem|समस्या/.test(t))return hi?"बिल्कुल। मैं आपके साथ voice में शिकायत दर्ज करूँगा। अपने शब्दों में समस्या बताइए और संभव हो तो नज़दीकी landmark भी बताइए।":"Absolutely. I can take the complaint by voice. Tell me the problem in your own words and, if possible, mention the nearest landmark.";
-if(/hello|hi|hey|namaste|नमस्ते|नमस्कार/.test(t))return hi?"नमस्ते। मैं साथी हूँ। आप शिकायत की स्थिति, विभाग या समाधान का अनुमान पूछ सकते हैं। या अपनी नई समस्या बोल सकते हैं।":"Hello. I’m Saathi. You can ask about complaint status, department, expected time, or tell me a new civic problem.";
-return hi?"जी, मैं सुन रहा हूँ। आप सीधे पूछ सकते हैं — मेरी शिकायत की स्थिति क्या है, कितने दिन लगेंगे, या कौन सा विभाग इसे देख रहा है?":"I’m listening. Ask about your complaint status, expected time, or the responsible department."}
-async function getReply(text){try{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),2500),r=await fetch((window.JANVAANI_API_BASE||"http://127.0.0.1:8000")+"/api/v1/voice/respond",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:text,language:selectedLanguage}),signal:controller.signal});clearTimeout(timer);if(r.ok){const d=await r.json();if(d&&d.reply_text)return d.reply_text}}catch(e){}return localReply(text)}
-async function handleText(text){heard.textContent="“"+text+"”";setVoiceState("speaking","Thinking… · समझ रहा हूँ…");const reply=await getReply(text);spoken.textContent=reply;speak(reply,selectedLanguage)}
-function startListening(){if(isListening){stopListening();setVoiceState("ready");return}const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast("Chrome speech recognition is required for voice input.");setVoiceState("error","Use Chrome or connect Indic ASR.");return}stopSpeaking();recognition=new SR();recognition.lang=browserVoiceLocale(selectedLanguage);recognition.interimResults=true;recognition.continuous=false;recognition.maxAlternatives=1;recognition.onstart=()=>{isListening=true;setVoiceState("listening");heard.textContent="“सुन रहा हूँ…”"};recognition.onresult=e=>{let final="",interim="";for(let i=e.resultIndex;i<e.results.length;i++){const s=e.results[i][0].transcript;e.results[i].isFinal?final+=s:interim+=s}heard.textContent="“"+(final||interim)+"”";if(final)handleText(final)};recognition.onerror=e=>{isListening=false;setVoiceState("error",e.error==="not-allowed"?"Microphone permission denied · Mic permission दें":"Could not hear clearly · फिर बोलें");toast(e.error==="not-allowed"?"Please allow microphone access.":"I couldn't hear that clearly.")};recognition.onend=()=>{isListening=false;recognition=null;if(!sheet.classList.contains("speaking"))setVoiceState("ready")};try{recognition.start()}catch(e){setVoiceState("error")}}
-listenOrb.addEventListener("click",startListening);$("#repeatVoice").addEventListener("click",()=>lastReply?speak(lastReply):toast("पहले Saathi से बात करें."));$("#stopVoice").addEventListener("click",stopSpeaking);voiceLang.addEventListener("change",()=>{selectedLanguage=voiceLang.value;const labels={"hi-IN":"Hindi voice ready · हिंदी आवाज़ तैयार","en-IN":"English voice ready","mal-IN":"Malvi voice mode · मालवी","bnd-IN":"Bundelkhandi voice mode · बुंदेलखंडी","nim-IN":"Nimadi voice mode · निमाड़ी","bag-IN":"Bagheli voice mode · बघेली","gon-IN":"Gondi voice mode · गोंडी"};setVoiceState("ready",labels[selectedLanguage]||"Voice mode ready")});$$("[data-say]").forEach(b=>b.addEventListener("click",()=>{const t=b.dataset.say;heard.textContent="“"+t+"”";handleText(t)}));if("speechSynthesis"in window&&speechSynthesis.addEventListener)speechSynthesis.addEventListener("voiceschanged",()=>speechSynthesis.getVoices());setVoiceState("ready");
+const DB = {
+  get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch (e) { return fallback; } },
+  set(key, value)    { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} },
+};
 
-/* Government portal */
-(function(){
-  const body=document.body, portalButtons=$$(".portal-btn");
-  function setPortal(mode){
-    body.classList.toggle("gov-mode",mode==="government");
-    portalButtons.forEach(b=>b.classList.toggle("active",b.dataset.portal===mode));
-    window.scrollTo({top:0,behavior:"smooth"});
-    if(mode==="government"){setTimeout(initGovMap,80);toast("Government Portal opened · सरकारी डैशबोर्ड")}
-    else toast("Citizen Portal opened · नागरिक पोर्टल");
-  }
-  portalButtons.forEach(b=>b.addEventListener("click",()=>setPortal(b.dataset.portal)));
-  $$("[data-portal-jump]").forEach(b=>b.addEventListener("click",()=>setPortal(b.dataset.portalJump)));
+const CITY_NAMES = ["Indore", "Bhopal", "Ujjain", "Gwalior", "Jabalpur", "Rewa", "Other town / village"];
+const STATUSES = ["Received", "AI verified", "Ward assigned", "Inspection", "Resolved"];
 
-  let govMap;
-  function initGovMap(){
-    if(!window.L||govMap)return;
-    govMap=L.map("liveMap",{zoomControl:true}).setView([22.9734,78.6569],6);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap contributors"}).addTo(govMap);
-    const points=[[22.7196,75.8577,"Indore","23 reports","high"],[23.2599,77.4126,"Bhopal","17 reports","high"],[23.1765,75.7885,"Ujjain","11 reports","medium"],[24.5362,81.3037,"Rewa","8 reports","medium"],[22.9676,76.0534,"Dewas","6 reports","low"]];
-    points.forEach(p=>L.marker([p[0],p[1]]).bindPopup("<b>"+p[2]+"</b><br>"+p[3]+"<br>Status: "+p[4].toUpperCase()).addTo(govMap));
-    $("#mapFeedStatus").textContent="● Live map connected";
-  }
-  $("#locateOfficer")?.addEventListener("click",()=>{
-    if(!govMap||!navigator.geolocation){toast("Location is not available.");return}
-    navigator.geolocation.getCurrentPosition(pos=>{const {latitude,longitude}=pos.coords;govMap.setView([latitude,longitude],14);L.circleMarker([latitude,longitude],{radius:8,color:"#2f9e6b",fillColor:"#2f9e6b",fillOpacity:.8}).addTo(govMap).bindPopup("Officer location").openPopup()},()=>toast("Location permission was not granted."));
-  });
+/* How each issue type is resolved — one action per status step */
+const PLANS = {
+  "Road / Pothole":            ["Logged & geo-tagged", "Photo & duplicates verified", "Ward engineer assigned", "Site inspection & measurement", "Repair done · proof uploaded"],
+  "Waterlogging / Water":      ["Logged & geo-tagged", "Verified with ward data", "Drainage crew assigned", "Pump / de-silting on site", "Cleared · proof uploaded"],
+  "Garbage / Sanitation":      ["Logged & geo-tagged", "Verified & route checked", "Sanitation team assigned", "Vehicle dispatched", "Cleared · proof uploaded"],
+  "Streetlight / Electricity": ["Logged & pole ID noted", "Verified & duplicates merged", "Electrical crew assigned", "Lamp / wiring inspected", "Fixed · proof uploaded"],
+};
 
-  const visionInput=$("#govVisionInput"), preview=$("#govVisionPreview"), analyze=$("#analyzeVision"), result=$("#visionResult");
-  $("#govChooseImage")?.addEventListener("click",()=>visionInput?.click());
-  visionInput?.addEventListener("change",()=>{const f=visionInput.files?.[0];if(!f)return;preview.classList.remove("hidden");preview.innerHTML="<img src='"+URL.createObjectURL(f)+"' alt='Complaint evidence'>";toast("Citizen evidence loaded · ready for CV analysis")});
-  analyze?.addEventListener("click",async()=>{
-    const f=visionInput?.files?.[0];if(!f){toast("Please upload a complaint image first.");return}
-    analyze.disabled=true;analyze.textContent="Analyzing image…";let data=null;
-    try{const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(f)});const r=await fetch((window.JANVAANI_API_BASE||"http://127.0.0.1:8000")+"/api/v1/vision/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image_base64:b64,filename:f.name,complaint_id:"JV-IND-0482"})});if(r.ok)data=await r.json()}catch(e){}
-    data=data||{category:"Pothole / Road Damage",severity:"4.2/5",confidence:"94%",actions:["Dispatch road-maintenance inspection team.","Place temporary hazard warning if traffic risk is high.","Repair the surface and capture an after-image."]};
-    $("#visionCategory").textContent=data.category;$("#visionSeverity").textContent=data.severity;$("#visionConfidence").textContent=data.confidence+" confidence";$("#visionActions").innerHTML=(data.actions||[]).map(x=>"<li>"+x+"</li>").join("");
-    result.classList.remove("hidden");analyze.disabled=false;analyze.textContent="🧠 Analyze with Computer Vision";toast("AI vision analysis completed");
-  });
+const hoursAgo = (h) => new Date(Date.now() - h * 3600e3).toISOString();
+const SEED = [
+  { id: "JV-IND-0489", issue: "Road / Pothole",            location: "Vijay Nagar, Indore",    priority: "High",   dept: "PWD & Nagar Nigam Roads", eta: 18, status: 3, note: "Engineer visited, tar mix ordered.", user: { name: "Ramesh Patel", phone: "9876500011" }, created: hoursAgo(20) },
+  { id: "JV-BPL-0312", issue: "Waterlogging / Water",      location: "Ward 9, Bhopal",         priority: "High",   dept: "Water Supply & Drainage", eta: 12, status: 1, note: "",                                  user: { name: "Sunita Verma", phone: "9876500022" }, created: hoursAgo(11) },
+  { id: "JV-IND-0477", issue: "Garbage / Sanitation",      location: "Ward 14, Indore",        priority: "Medium", dept: "Sanitation Department",   eta: 24, status: 2, note: "Team assigned for evening run.",    user: { name: "Amit Joshi",   phone: "9876500033" }, created: hoursAgo(9) },
+  { id: "JV-UJN-0150", issue: "Streetlight / Electricity", location: "Freeganj, Ujjain",       priority: "Medium", dept: "Electricity Board",       eta: 20, status: 0, note: "",                                  user: null,                                     created: hoursAgo(3) },
+  { id: "JV-GWL-0098", issue: "Road / Pothole",            location: "Lashkar, Gwalior",       priority: "High",   dept: "PWD & Nagar Nigam Roads", eta: 18, status: 4, note: "Resurfaced, photo verified.",       user: { name: "Neha Singh",   phone: "9876500044" }, created: hoursAgo(30) },
+];
 
-  const resolutionInput=$("#resolutionInput"), after=$("#afterEvidence"), check=$("#resolutionCheck"), close=$("#closeComplaint");
-  $("#chooseResolution")?.addEventListener("click",()=>resolutionInput?.click());
-  resolutionInput?.addEventListener("change",()=>{const f=resolutionInput.files?.[0];if(!f)return;after.innerHTML="<img src='"+URL.createObjectURL(f)+"' alt='Resolution evidence' style='max-width:100%;max-height:100%;border-radius:10px;object-fit:cover'><small>Resolution evidence</small>";check.classList.add("pass");check.textContent="✓ Resolution evidence uploaded. AI verification passed for demo review.";close.disabled=false;toast("Resolution proof uploaded")});
-  close?.addEventListener("click",()=>{if(close.disabled)return;$("#closureStatus").textContent="Resolved / Closed";close.textContent="✓ Complaint Closed";close.disabled=true;check.textContent="✓ Closed after resolution evidence review.";toast("Complaint closed after proof-of-resolution")});
-})();
+const Complaints = {
+  all() {
+    let list = DB.get("jv_complaints", null);
+    if (!list) { list = SEED; DB.set("jv_complaints", list); }
+    return list;
+  },
+  add(c)  { const l = this.all(); l.unshift(c); DB.set("jv_complaints", l); },
+  save(l) { DB.set("jv_complaints", l); },
+};
 
-/* =========================================================
-   JANVAANI DIALECT + MP HERITAGE LAYER
-   ========================================================= */
-(function(){
-  /* Background inspired by the supplied reference video:
-     a slow cross-fade through MP heritage sites, while the
-     foreground stays white like a government portal. */
-  const monuments=[
-    ["Jahangir Mahal · Orchha","https://commons.wikimedia.org/wiki/Special:FilePath/Jahangir%20Mahal%20of%20Orchha%20Place.jpg"],
-    ["Sanchi Stupa · Raisen","https://commons.wikimedia.org/wiki/Special:FilePath/Sanchi%20Stupa%2C%20Sanchi%2C%20Madhya%20Pradesh.jpg"],
-    ["Khajuraho Temples · Chhatarpur","https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg"],
-    ["Ahilya Fort · Maheshwar","https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg"],
-    ["Gwalior Fort · Gwalior","https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%20of%20Madhya%20Pradesh.jpg"],
-    ["Bhojeshwar Temple · Bhojpur","https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg"],
-    ["Mandu · Dhar","https://commons.wikimedia.org/wiki/Special:FilePath/Jahaz%20Mahal%2C%20Mandu%2C%20Madhya%20Pradesh.jpg"],
-    ["Bhimbetka Rock Shelters · Raisen","https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20rock%20shelters.jpg"],
-    ["Chausath Yogini Temple · Morena","https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%20Morena.jpg"]
-  ];
-  const stage=document.createElement("div");
-  stage.className="mp-monument-stage";
-  stage.setAttribute("aria-hidden","true");
-  monuments.forEach((m,i)=>{
-    const s=document.createElement("div");
-    s.className="mp-monument-slide"+(i===0?" active":"");
-    s.style.backgroundImage="url('"+m[1]+"')";
-    s.dataset.monument=m[0];
-    stage.appendChild(s);
-  });
-  document.body.prepend(stage);
-  let current=0;
-  setInterval(()=>{
-    const slides=[...stage.children];
-    slides[current]?.classList.remove("active");
-    current=(current+1)%slides.length;
-    slides[current]?.classList.add("active");
-  },5200);
+/* ---------- Router: #register and #admin are separate views ---------- */
+const VIEWS = { "#register": "reg-view", "#admin": "admin-view" };
 
-  /* Local dialect response layer. The backend returns the same
-     dialect text; this frontend only handles speech output. */
-  const dialectLocale={
-    "hi-IN":"hi-IN","en-IN":"en-IN",
-    "mal-IN":"hi-IN","bnd-IN":"hi-IN","nim-IN":"hi-IN",
-    "bag-IN":"hi-IN","gon-IN":"hi-IN","kha-IN":"hi-IN"
-  };
-  const dialectNames={
-    "mal-IN":"मालवी","bnd-IN":"बुंदेली","nim-IN":"निमाड़ी",
-    "bag-IN":"बघेली","gon-IN":"गोंडी","kha-IN":"खंडी"
-  };
-
-  /* Prefer an exact local voice if the browser/OS exposes one.
-     Otherwise use the best Hindi voice to pronounce the dialect
-     text rather than silently switching the response back to Hindi. */
-  window.JANVAANI_DIALECT_LOCALES=dialectLocale;
-  window.JANVAANI_DIALECT_NAMES=dialectNames;
-
-  function bestDialectVoice(lang){
-    if(!("speechSynthesis" in window)) return null;
-    const voices=speechSynthesis.getVoices();
-    const exact=voices.find(v=>v.lang?.toLowerCase()===lang.toLowerCase());
-    if(exact) return exact;
-    const prefix=lang.split("-")[0].toLowerCase();
-    const same=voices.find(v=>v.lang?.toLowerCase().startsWith(prefix));
-    if(same) return same;
-    return voices.find(v=>v.lang?.toLowerCase().startsWith("hi-in")) ||
-           voices.find(v=>v.lang?.toLowerCase().startsWith("hi")) ||
-           voices.find(v=>v.lang?.toLowerCase().startsWith("en-in")) ||
-           voices[0] || null;
-  }
-
-  /* Override the previous generic Hindi mapping. */
-  window.JANVAANI_SPEAK_DIALECT=function(text,lang){
-    lastReply=text;
-    if(!("speechSynthesis" in window)){setVoiceState("ready");return;}
-    stopSpeaking();
-    const u=new SpeechSynthesisUtterance(text);
-    const target=dialectLocale[lang]||lang||"hi-IN";
-    u.lang=target;
-    u.rate=target.startsWith("hi")?.90:.96;
-    u.pitch=1.02;
-    const v=bestDialectVoice(lang);
-    if(v) u.voice=v;
-    u.onstart=()=>setVoiceState("speaking");
-    u.onend=()=>setVoiceState("ready");
-    u.onerror=()=>setVoiceState("ready");
-    sheet.classList.add("speaking");
-    speechSynthesis.speak(u);
-  };
-
-  /* Replace reply retrieval so selected dialect controls the
-     language of the answer returned by FastAPI. */
-  const oldGetReply=window.getReply;
-  window.getReply=async function(text){
-    try{
-      const controller=new AbortController();
-      const timer=setTimeout(()=>controller.abort(),2500);
-      const r=await fetch((window.JANVAANI_API_BASE||"http://127.0.0.1:8000")+
-        "/api/v1/voice/respond",{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({text:text,language:selectedLanguage}),
-          signal:controller.signal
-        });
-      clearTimeout(timer);
-      if(r.ok){
-        const d=await r.json();
-        if(d?.reply_text) return d.reply_text;
-      }
-    }catch(e){}
-    return typeof oldGetReply==="function"?oldGetReply(text):localReply(text);
-  };
-
-  /* Replace speak() with the dialect-aware speaker. */
-  window.speak=function(text,lang=selectedLanguage){
-    JANVAANI_SPEAK_DIALECT(text,lang);
-  };
-
-  /* Voice selector label now makes the active local mode obvious. */
-  voiceLang?.addEventListener("change",()=>{
-    const label=dialectNames[voiceLang.value];
-    if(label) toast(label+" voice mode selected · स्थानीय बोली सक्रिय");
-  });
-})();
+function route() {
+  const target = VIEWS[location.hash] || "top";
+  ["top", "reg-view", "admin-view"].forEach((id) => ($(id).hidden = id !== target));
+  const anchor = location.hash.length > 1 && target === "top" ? $(location.hash.slice(1)) : null;
+  anchor ? anchor.scrollIntoView() : window.scrollTo(0, 0);
+  if (target === "reg-view" && window.renderRegister) renderRegister();
+  if (target === "admin-view" && window.renderAdmin) renderAdmin();
+}
+addEventListener("hashchange", route);

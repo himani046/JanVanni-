@@ -1,1 +1,162 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>JanVaani AI · जनवाणी</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<!-- Full-page blurred photo background (filled by script.js) -->
+<div id="bg" aria-hidden="true"></div>
+
+
+<!-- Navigation -->
+<nav>
+ <div class="logo"><i>ज</i><div><b>JanVaani <u>AI</u></b><small>जनवाणी · Citizen Voice, Government Action</small></div></div>
+ <a href="#top">Home<small>होम</small></a><a href="#saathi">Saathi<small>साथी</small></a><a href="#report">Report<small>शिकायत</small></a><a href="#track">My Complaints<small>मेरी शिकायतें</small></a><a href="#cmd">Command Center<small>कमांड सेंटर</small></a>
+<a href="#register" id="who">Register<small>पंजीकरण</small></a>
+<a href="#admin">Admin<small>अधिकारी</small></a></nav>
+<!-- ================= MAIN ================= -->
+<main id="top">
+ <!-- Hero -->
+ <section class="hero">
+  <div>
+   <div class="eye">Multilingual · Multimodal · MP Local Governance</div>
+   <h1>Your voice becomes <em>government action.</em></h1>
+   <p class="lead">Speak naturally in Hindi, Bundelkhandi, Malvi, Nimadi or English. JanVaani understands the complaint, verifies the evidence, finds the responsible authority and lets citizens track the outcome.</p>
+   <div class="btns"><a class="btn p" href="#saathi" onclick="startVoiceComplaint()">🎙 Speak a complaint · शिकायत बोलें</a><a class="btn" href="#report">📷 Upload photo · फोटो अपलोड करें</a></div>
+   <div class="chips"><span>हिंदी</span><span>Bundelkhandi</span><span>Malvi</span><span>Nimadi</span><span>English</span></div>
+  </div>
+  <div class="vis"><div class="orbw">
+   <div class="orb" onclick="startVoiceComplaint()" role="button" tabindex="0" style="cursor:pointer"><div>शिकायत दर्ज करें</div></div>
+  </div></div>
+ </section>
+
+ <!-- Talk to Saathi banner + chatbot -->
+ <section class="saathi" id="saathi">
+  <div class="sb"><div class="mic">🎙</div>
+   <div class="tx"><div class="eye">AI Chatbot · Live ready</div><h2>Talk to Saathi <span class="h" style="display:inline;font-size:.6em">साथी से बात करें</span></h2>
+   <p>Describe the problem in your own words. Saathi asks follow-up questions instead of rejecting vague complaints.</p>
+   <span class="qt">“हमार गली मा पानी भर गवा है…” <small style="color:var(--mut)">· Dialect → structured complaint</small></span></div>
+   <button class="btn p" id="talk" onclick="startVoiceComplaint()">Talk now · बात करें</button></div>
+  <div class="chat" id="chat">
+   <div class="chat-h"><span>● Saathi · online</span><button id="cx" aria-label="Close chat" title="Close chat">✕</button></div>
+   <div class="msgs" id="msgs" aria-live="polite"></div>
+   <div class="qr" id="qr"></div>
+   <div class="in"><input id="ci" placeholder="Type or speak… यहाँ लिखें या बोलें" aria-label="Message"><button class="mc" id="mc" aria-label="Speak">🎙</button><button id="send">Send</button></div></div>
+ </section>
+
+ <!-- Stats strip -->
+ <div class="stats">
+  <div><b>18</b>Local issue categories<span class="h">स्थानीय समस्या श्रेणियाँ</span></div>
+  <div><b>5</b>Speech modes<span class="h">भाषा / बोली</span></div>
+  <div><b>30m</b>Duplicate radius<span class="h">डुप्लीकेट पहचान</span></div>
+  <div><b>24×7</b>Citizen status access<span class="h">स्थिति जानकारी</span></div>
+ </div>
+
+ <!-- Smart reporting -->
+ <section class="sec" id="report">
+  <div class="eye">Smart Reporting</div><h2>One complaint. Every input.</h2><span class="h">एक शिकायत • आवाज़, फोटो, GPS और टेक्स्ट — सब साथ</span>
+  <div class="g3">
+   <div class="card"><span class="tag">Live ready</span><h3>🎙 Talk to Saathi</h3><p>Describe the problem in your own words. The assistant asks follow-up questions instead of rejecting vague complaints.</p><div class="q">“हमार गली मा पानी भर गवा है…”<br><small style="color:var(--mut)">Dialect → structured complaint</small></div><button class="btn p" type="button" style="margin-top:14px" onclick="startVoiceComplaint()">🎙 Speak now · बोलें</button></div>
+   <div class="card" id="evc"><span class="tag">Computer vision</span><h3>📷 Upload visual evidence</h3><p>Detect potholes, garbage, waterlogging and streetlight faults from images, with GPS and timestamp metadata.</p>
+    <button class="dz" id="dz" type="button">＋ Drop / upload photo<small>Photo · GPS · timestamp metadata</small></button>
+    <input type="file" id="ev" accept="image/*" hidden>
+    <div id="evout"></div></div>
+   <div class="card" id="auc"><span class="tag">Geo routing</span><h3>📍 Find the right authority</h3><p>GPS and ward boundary decide the chain: Nagar Nigam, PWD, water, sanitation or electricity.</p>
+    <div class="chipset" id="au-cat" role="group" aria-label="Issue type"></div>
+    <div class="fa"><select id="au-city" aria-label="City"></select><button class="mini" id="au-gps" type="button">📍 Use my location</button></div>
+    <div id="auout" class="q">Choose an issue and city to see who is responsible.</div></div>
+  </div>
+  </div>
+ </section>
+
+ <!-- Map + heatmap -->
+ <section class="sec">
+  <div class="eye">Geo + Heatmap</div><h2>From location to action.</h2><span class="h">लोकेशन से शिकायत तक — एक ही दृश्य में</span>
+  <div class="split">
+   <div class="card map"><svg viewBox="0 0 600 340"><defs><radialGradient id="rg"><stop offset="0" stop-color="#FF5A5A" stop-opacity=".9"/><stop offset="1" stop-color="#FF5A5A" stop-opacity="0"/></radialGradient></defs>
+    <path d="M60 190L130 110L290 92L400 120L520 170L470 215L360 260L250 250L130 235Z" fill="#1B3A8C" stroke="#4E6EDC" stroke-opacity=".6"/>
+    <circle cx="140" cy="175" r="42" fill="url(#rg)"/><circle cx="360" cy="205" r="52" fill="url(#rg)"/><circle cx="440" cy="150" r="26" fill="url(#rg)"/><circle cx="235" cy="220" r="30" fill="url(#rg)"/><circle cx="210" cy="180" r="7" fill="#37D6A0"/>
+    <g fill="#F4EFE6" font-size="12" font-family="Hind"><text x="110" y="172">Indore · 23</text><text x="335" y="210">Bhopal · 17</text><text x="420" y="146">Rewa · 8</text><text x="212" y="240">Ujjain · 11</text><text x="185" y="200" fill="#37D6A0">You are here</text></g></svg></div>
+   <div class="kp"><div class="card"><span class="tag">Open incidents</span><b>59</b><small style="color:var(--mut)">+8 today</small></div><div class="card"><span class="tag">High priority</span><b style="color:var(--or2)">12</b><small style="color:var(--mut)">SLA at risk</small></div><div class="card"><span class="tag">Resolved today</span><b style="color:var(--gr)">21</b><small style="color:var(--mut)">Verified by AI</small></div></div>
+  </div>
+ </section>
+
+ <!-- Complaint tracking -->
+ <section class="sec" id="track">
+  <div class="eye">Citizen Tracking</div><h2>Know what happens next.</h2><span class="h">शिकायत के हर चरण की जानकारी</span>
+  <div class="card" style="margin-top:24px"><div class="d" style="font-size:22px;font-weight:800">JV-IND-0489 <small style="font-size:13px;color:var(--mut);font-weight:400">· Vijay Nagar, Indore · Road hazard</small></div>
+   <div class="trk"><div class="d"><i></i>Received</div><div class="d"><i></i>AI verified</div><div class="d"><i></i>Ward assigned</div><div class="c"><i></i>Inspection</div><div><i></i>Resolution</div></div>
+   <p class="note" style="margin-top:20px">Predicted ETA: <b style="color:var(--or2)">18 hrs</b> for next field action · Indore Municipal Corporation, Ward 22</p></div>
+ </section>
+
+ <!-- Command center -->
+ <section class="sec" id="cmd">
+  <div class="eye">Command Center</div><h2>Municipal action, not just ticketing.</h2><span class="h">अधिकारी डैशबोर्ड: प्राथमिकता, SLA, वार्ड और समाधान प्रमाण</span>
+  <div class="g3">
+   <div class="card"><h3>⚠ SLA risk queue</h3><div class="row"><em>HIGH</em>Waterlogging · Ward 9<span>91% risk</span></div><div class="row"><em class="m">MED</em>Pothole · Ward 22<span>68% risk</span></div><div class="row"><em class="m">MED</em>Garbage · Ward 14<span>54% risk</span></div></div>
+   <div class="card"><h3>🧠 AI triage</h3><div class="q" style="border-color:var(--or2)">Pothole severity<br><b class="d" style="font-size:38px">4.2</b> /5<br><small style="color:var(--mut)">Heavy traffic corridor · deep cavity · two-wheeler hazard</small></div></div>
+   <div class="card"><h3>✅ Proof of resolution</h3><div class="q" style="border-color:var(--gr)">Before → After<br><small style="color:var(--gr)">AI comparison: 94% match · repair likely complete</small></div></div>
+  </div>
+ </section>
+</main>
+
+<!-- Registration View -->
+<section id="reg-view" hidden>
+  <div class="pill"><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></i>Citizen Registration <span class="h">नागरिक पंजीकरण</span></div>
+  <h2 class="ttl">Register with <em>JanVaani</em></h2>
+  <div class="sub">जनवाणी पर पंजीकरण करें</div>
+  <p class="desc">Create your account to file complaints, track status and stay updated.<br>खाते बनाएं ताकि आप शिकायत दर्ज कर सकें, स्थिति देख सकें और अपडेट रह सकें।</p>
+
+  <form id="regf" class="auth-card" style="max-width:626px" novalidate>
+    <h3>Personal Information</h3>
+    <span class="h">व्यक्तिगत जानकारी</span>
+    <div class="g2">
+      <label class="fld">Full Name <span>/ पूरा नाम</span>
+        <div class="frow"><i class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></i><input name="name" type="text" placeholder="Enter your full name"></div>
+        <small class="hint">अपना पूरा नाम दर्ज करें</small><small class="err" data-err="name"></small>
+      </label>
+      <label class="fld">Email <span>/ ईमेल</span>
+        <div class="frow"><i class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></i><input name="email" type="email" placeholder="you@example.com"></div>
+        <small class="hint">अपना ईमेल दर्ज करें</small><small class="err" data-err="email"></small>
+      </label>
+      <label class="fld">Mobile Number <span>/ मोबाइल नंबर</span>
+        <div class="frow"><i class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></i><input name="phone" type="tel" placeholder="10-digit mobile number"></div>
+        <small class="hint">10 अंकों का मोबाइल नंबर</small><small class="err" data-err="phone"></small>
+      </label>
+      <label class="fld">City <span>/ शहर</span>
+        <div class="frow"><i class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></i><select name="city"></select></div>
+        <small class="hint">अपना शहर चुनें</small>
+      </label>
+      <div class="full"><label class="fld">Area / Ward <span>/ क्षेत्र / वार्ड</span>
+        <div class="frow"><i class="ico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></i><input name="area" type="text" placeholder="Enter your area or ward"></div>
+        <small class="hint">अपना क्षेत्र या वार्ड दर्ज करें</small><small class="err" data-err="area"></small>
+      </label></div>
+    </div>
+    <label class="consent"><input name="consent" type="checkbox"><span>I agree to register on JanVaani.<br>मैं जनवाणी पर पंजीकरण करने के लिए सहमत हूँ।</span></label>
+    <small class="err" data-err="consent" style="margin-left:0"></small>
+    <button class="btn p wide" type="submit"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M2 21c0-4 4-6 8-6"/><path d="M19 15v6M16 18h6"/></svg><span>Register · पंजीकरण करें</span><span class="go"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button>
+  </form>
+
+  <div id="prof" class="card" style="max-width:626px;margin-top:24px" hidden></div>
+</section>
+
+<!-- Admin View -->
+<section id="admin-view" hidden></section>
+
+<footer>
+  JanVaani AI · जनवाणी — Made for the people of Madhya Pradesh
+</footer>
+
+<script src="script.js"></script>
+<script src="app.js"></script>
+<script src="register.js"></script>
+<script src="admin.js"></script>
+
+</body>
+</html>
