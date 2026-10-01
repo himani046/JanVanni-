@@ -192,3 +192,22 @@ uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 Health: `http://127.0.0.1:8000/health`
 
 The frontend will fall back to demo responses when the backend is unavailable.
+
+
+## Added Citizen Tools frontend
+
+The repository also includes a standalone citizen-tools surface based on the supplied frontend files:
+
+- `citizen.html` — citizen voice/evidence/authority/registration workspace.
+- `style.css` — supplied dark navy/orange visual system with glass cards, Saathi chat and evidence components.
+- `script.js` — supplied background slideshow, Saathi scripted voice/chat demo, evidence upload/GPS and authority finder; complaint submissions are persisted locally for the registration profile.
+- `register.js` — localStorage-based citizen registration/profile integration.
+- `images/` — optional local monument/background images can be referenced through `BG_IMAGES` in `script.js`.
+
+Open the new workspace at:
+
+```text
+http://localhost:5501/citizen.html
+```
+
+The main `index.html` remains the full JanVaani citizen + government portal with the Computer Vision and verified-closure workflow. The new citizen workspace complements it rather than replacing those production-oriented prototype modules.
