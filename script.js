@@ -12,11 +12,11 @@
   "https://commons.wikimedia.org/wiki/Special:FilePath/Sanchi%20Stupa%2C%20Sanchi%2C%20Madhya%20Pradesh.jpg",
   "https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg",
   "https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%20of%20Madhya%20Pradesh.jpg",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%2C%20Gwalior%2C%20Madhya%20Pradesh.jpg",
   "https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg",
   "https://commons.wikimedia.org/wiki/Special:FilePath/Jahaz%20Mahal%2C%20Mandu%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20rock%20shelters.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%20Morena.jpg"
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20Rock%20Shelters.jpg",
+  "https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%2C%20Morena.jpg"
 ];
    Photos added with the "Add photos" button are kept in the browser
    (localStorage) and shown after these.
