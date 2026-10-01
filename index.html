@@ -13,26 +13,11 @@
 <div class="gov-strip"><span>Government • Citizen Services</span><span>मध्य प्रदेश • नागरिक सेवा</span><span>24×7 Voice Assistance</span></div>
 <header class="topbar">
   <a class="brand" href="#home"><span class="brand-seal">ज</span><span><strong>JANVAANI <em>AI</em></strong><small>जनवाणी • आपकी आवाज़, सरकारी कार्रवाई</small></span></a>
-  <nav><a class="active" href="#home">Home <i>होम</i></a><a href="#report">Report <i>शिकायत</i></a><a href="#track">Track <i>ट्रैक</i></a><a href="#city">City Pulse <i>शहर</i></a><a href="#command">Command <i>कमांड</i></a></nav>
-  <div class="portal-switch" role="tablist" aria-label="Portal selection"><button class="portal-btn active" data-portal="citizen">Citizen Portal<br><small>नागरिक पोर्टल</small></button><button class="portal-btn" data-portal="government">Government Portal<br><small>सरकारी पोर्टल</small></button></div><div class="top-actions"><button class="access-btn" id="accessBtn">A− A+ <span>Accessibility</span></button><button class="lang-btn" id="langToggle">हिं</button></div>
+  <nav><a class="active" href="#home">Home <i>होम</i></a><a href="#saathi" data-voice>Saathi <i>साथी</i></a><a href="#report">Report <i>शिकायत</i></a><a href="#track">My Complaints <i>मेरी शिकायतें</i></a><a href="#command">Command Center <i>कमांड सेंटर</i></a><a href="#register">Register <i>पंजीकरण</i></a><button class="admin-link portal-btn" type="button" data-portal="government">Admin <i>अधिकारी</i></button></nav>
+  <div class="top-actions"><button class="access-btn" id="accessBtn">A− A+ <span>Accessibility</span></button><button class="lang-btn" id="langToggle">हिं</button></div>
 </header>
 <main>
-<section class="hero reveal" id="home">
-  <div class="hero-copy">
-    <div class="official-line"><span class="seal-dot">✓</span> DIGITAL CIVIC GRIEVANCE PLATFORM <span>MP • 2026</span></div>
-    <h1>Your voice.<br><span>Your complaint.</span><br>Heard.</h1>
-    <p>बस बोलिए। JanVaani आपकी बात समझता है, समस्या को पहचानता है, सही विभाग तक पहुँचाता है और आपकी शिकायत की स्थिति <b>आवाज़ में</b> बताता है।</p>
-    <div class="hero-actions"><button class="primary-btn" data-voice>🎙️ Speak to Saathi <span>साथी से बात करें</span></button><a class="ghost-btn" href="#report">Report a problem <span>समस्या दर्ज करें</span> →</a></div>
-    <div class="trust-row"><span>✓ Multilingual</span><span>✓ Voice-first</span><span>✓ Geo-routed</span><span>✓ Trackable</span></div>
-  </div>
-  <div class="hero-visual">
-    <div class="city-orbit orbit-a"></div><div class="city-orbit orbit-b"></div><div class="city-orbit orbit-c"></div>
-    <div class="hero-art"><img src="assets/voice-illustration.svg" alt="Citizen speaking to JanVaani"></div>
-    <button class="hero-orb" data-voice aria-label="Speak to Saathi"><span>🎙</span><b>BOLO</b><small>बोलें</small></button>
-    <div class="floating-card fc-one"><small>SAATHI HEARS</small><b>“मेरी शिकायत की स्थिति?”</b></div>
-    <div class="floating-card fc-two"><small>SAATHI REPLIES</small><b>“अभी निरीक्षण जारी है…”</b></div>
-  </div>
-</section>
+<section class="hero reveal" id="home"><div class="hero-copy"><div class="official-line"><span class="seal-dot">◉</span> CITIZEN VOICE • GOVERNMENT ACTION <span>MP</span></div><h1>Your voice becomes<br><span>government action.</span></h1><p>Speak in your language. JanVaani understands your complaint, connects it to the right civic authority, and keeps you informed from report to resolution.</p><div class="hero-actions"><button class="primary-btn" data-voice>🎙️ Speak to Saathi <span>साथी से बात करें</span></button><a class="ghost-btn" href="#report">＋ Upload photo <span>फोटो जोड़ें</span></a></div><div class="trust-row"><span>● Hindi</span><span>● English</span><span>● Malvi</span><span>● Bundelkhandi</span><span>● Nimadi</span></div></div><div class="hero-visual"><div class="hero-art"><img src="assets/voice-illustration.svg" alt="Citizen speaking to JanVaani"></div><button class="hero-orb" data-voice><span>🎙</span><b>BOLO</b><small>बोलें</small></button><div class="floating-card fc-one"><small>SAATHI • साथी</small><b>“मेरी शिकायत की स्थिति?”</b></div><div class="floating-card fc-two"><small>JANVAANI AI</small><b>Voice → AI → Action</b></div></div></section>
 <section class="quick-stats reveal">
   <div><strong data-count="18420">0</strong><span>Citizen reports processed</span><small>नागरिक शिकायतें</small></div>
   <div><strong data-count="126">0</strong><span>Active ward teams</span><small>सक्रिय वार्ड टीमें</small></div>
@@ -49,7 +34,7 @@
   </div>
   <div class="flow-line"><span></span><span></span><span></span></div>
 </section>
-<section class="voice-banner reveal">
+<section class="voice-banner reveal" id="saathi">
   <div class="voice-banner-art"><img src="assets/voice-wave.svg" alt=""></div>
   <div><span class="eyebrow">THE JANVAANI DIFFERENCE</span><h2>यह chatbot नहीं है.<br><span>यह बातचीत है.</span></h2><p>Citizen को form भरना या ticketing language सीखना जरूरी नहीं। बोलिए, पूछिए, सुनिए.</p></div>
   <button class="primary-btn compact" data-voice>🎙 Talk to Saathi</button>
@@ -145,8 +130,8 @@
 </section>
 <section class="section reveal"><div class="section-heading"><div><span class="eyebrow">07 • CIVIC SERVICES</span><h2>What can JanVaani handle?</h2><p>Common urban civic issues citizens can report through voice.</p></div></div><div class="service-grid" id="serviceGrid"></div></section>
 <section class="closing reveal"><div><span class="eyebrow">JANVAANI AI</span><h2>सरकार तक पहुँचने के लिए<br>आपको सरकारी भाषा बोलने की जरूरत नहीं.</h2><p>अपनी भाषा में बोलिए. JanVaani आपकी बात को action में बदलने के लिए designed है.</p></div><button class="primary-btn" data-voice>🎙️ बोलें • Speak</button></section>
-</main>
-<footer><div><strong>JANVAANI <em>AI</em></strong><span>जनवाणी • Voice-first civic grievance platform</span></div><div>Citizen Services • Transparency • Accessibility</div></footer>
+<section class="auth-section reveal" id="register"><div class="auth-kicker">◉ CITIZEN REGISTRATION &nbsp; नागरिक पंजीकरण</div><h2>Register with <span>JanVaani</span></h2><h3 class="auth-hindi">जनवाणी पर पंजीकरण करें</h3><p class="auth-sub">Create your account to file complaints, track status and stay updated.<br>खाते बनाएं ताकि आप शिकायत दर्ज कर सकें, स्थिति देख सकें और अपडेटेड रह सकें।</p><div class="auth-card"><h3>Personal Information</h3><p>व्यक्तिगत जानकारी</p><div class="auth-grid"><div class="auth-field"><label>Full Name / पूरा नाम</label><input placeholder="Enter your full name"></div><div class="auth-field"><label>Email / ईमेल</label><input type="email" placeholder="you@example.com"></div><div class="auth-field"><label>Mobile Number / मोबाइल नंबर</label><input maxlength="10" placeholder="10-digit mobile number"></div><div class="auth-field"><label>City / शहर</label><select><option>Indore</option><option>Bhopal</option><option>Ujjain</option><option>Rewa</option></select></div><div class="auth-field auth-full"><label>Area / Ward / क्षेत्र / वार्ड</label><input placeholder="Enter your area or ward"></div><div class="auth-field"><label>Password / पासवर्ड</label><input type="password" placeholder="Create password"></div><div class="auth-field"><label>Confirm Password / पासवर्ड दोबारा</label><input type="password" placeholder="Confirm password"></div></div><button class="primary-btn auth-submit">Register • पंजीकरण करें</button><div class="auth-switch"><span>Already registered?</span><a href="#signin">Sign in • साइन इन</a></div></div></section><section class="auth-section signin-section reveal" id="signin"><div class="auth-kicker">◉ OFFICIAL SIGN-IN &nbsp; आधिकारिक लॉगिन</div><h2>Sign in to <span>JanVaani</span></h2><h3 class="auth-hindi">जनवाणी में साइन इन करें</h3><p class="auth-sub">Access your complaints, status updates and citizen services.</p><div class="auth-card signin-card"><div class="auth-field"><label>Mobile / Email</label><input placeholder="Enter mobile number or email"></div><div class="auth-field auth-gap"><label>Password / पासवर्ड</label><input type="password" placeholder="Enter password"></div><button class="primary-btn auth-submit">Sign in • साइन इन</button><div class="auth-switch"><span>New to JanVaani?</span><a href="#register">Register • पंजीकरण</a></div></div></section></main>
+<footer><div><strong>JANVAANI <em>AI</em></strong><span>जनवाणी • Citizen Voice, Government Action</span></div><div>Home • Saathi • Report • My Complaints • Command Center • Register • Admin</div></footer>
 <div class="voice-overlay" id="voiceOverlay" aria-hidden="true"><div class="voice-sheet"><button class="voice-close" id="voiceClose" aria-label="Close">×</button>
   <div class="voice-sheet-head"><div class="voice-avatar">🎙</div><div><span class="eyebrow">SAATHI • साथी</span><h2>बस बोलिए.</h2><p>मैं सुन रहा हूँ और जवाब भी आवाज़ में दूँगा.</p></div><span class="online"><i></i> ONLINE</span></div>
   <div class="voice-stage-large"><div class="wave" id="wave"></div><button class="listen-orb" id="listenOrb"><span>🎙</span><b id="listenLabel">बोलें</b><small id="listenHint">Tap & speak</small></button></div>
