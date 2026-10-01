@@ -277,3 +277,178 @@ main{background:transparent!important}
 .gov-strip{background:#f3f7fa!important;color:#263d52!important}
 .topbar{background:rgba(255,255,255,.96)!important}
 footer{background:rgba(243,247,250,.97)!important}
+
+
+/* =========================================================
+   JANVAANI — REFERENCE VIDEO MONUMENT VISIBILITY OVERRIDE
+   IMPORTANT: monuments must remain clearly visible behind the
+   government UI. Do not wash them out with opaque white panels.
+   ========================================================= */
+html, body {
+  background: transparent !important;
+}
+
+body {
+  position: relative !important;
+  isolation: isolate !important;
+}
+
+/* Kill the previous white veil that was hiding the monuments. */
+body:before,
+body:after,
+.mp-monument-stage:after {
+  display: none !important;
+  background: none !important;
+}
+
+/* Full-screen moving MP heritage layer. */
+.mp-monument-stage {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  background: #dfe8ed !important;
+}
+
+.mp-monument-slide {
+  position: absolute !important;
+  inset: -2% !important;
+  width: 104% !important;
+  height: 104% !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  opacity: 0 !important;
+  filter: none !important;
+  transform: scale(1.015) !important;
+  transition: opacity 1.25s ease-in-out, transform 6s ease !important;
+  will-change: opacity, transform !important;
+}
+
+.mp-monument-slide.active {
+  opacity: .92 !important;
+  transform: scale(1) !important;
+}
+
+/* Only a very light readability veil — the monument remains visible. */
+.mp-monument-stage::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  background:
+    linear-gradient(90deg,
+      rgba(255,255,255,.20) 0%,
+      rgba(255,255,255,.08) 50%,
+      rgba(255,255,255,.16) 100%) !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+/* Keep all actual website content above the moving heritage layer. */
+.gov-strip,
+.topbar,
+main,
+footer,
+.voice-overlay {
+  position: relative !important;
+  z-index: 3 !important;
+}
+
+/* Transparent page canvas — this is essential. */
+main,
+.hero,
+.quick-stats,
+.section {
+  background: transparent !important;
+}
+
+/* Hero should look like the reference: monument visibly behind it. */
+.hero {
+  background: rgba(255,255,255,.18) !important;
+  border-radius: 0 0 28px 28px !important;
+}
+
+/* Light official header without hiding the background. */
+.gov-strip {
+  background: rgba(255,255,255,.76) !important;
+  color: #263d52 !important;
+  backdrop-filter: blur(7px) !important;
+  -webkit-backdrop-filter: blur(7px) !important;
+}
+
+.topbar {
+  background: rgba(255,255,255,.82) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(38,61,82,.16) !important;
+}
+
+/* Glass government sections: readable, but NOT solid white. */
+.section,
+.voice-banner,
+.closing,
+.auth-section {
+  background: rgba(255,255,255,.50) !important;
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
+  border-color: rgba(38,61,82,.16) !important;
+}
+
+/* Cards remain readable while allowing the monument to show through. */
+.process-card,
+.pulse-card,
+.map-card,
+.ticket-main,
+.eta-card,
+.before-after,
+.command-dashboard,
+.service-card,
+.auth-card,
+.gov-panel,
+.gov-case,
+.upload-zone,
+.vision-result,
+.closure-case,
+.floating-card {
+  background: rgba(255,255,255,.72) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border-color: rgba(38,61,82,.16) !important;
+}
+
+/* Don't let nested cards become opaque again. */
+.command-dashboard,
+.map-card,
+.ticket-main,
+.eta-card,
+.before-after {
+  box-shadow: 0 14px 40px rgba(31,48,64,.12) !important;
+}
+
+/* Transparent footer instead of a solid block. */
+footer {
+  background: rgba(243,247,250,.78) !important;
+  backdrop-filter: blur(7px) !important;
+  -webkit-backdrop-filter: blur(7px) !important;
+}
+
+/* Mobile: keep the same full-screen monument effect. */
+@media (max-width: 760px) {
+  .mp-monument-slide {
+    background-position: center center !important;
+  }
+
+  .mp-monument-slide.active {
+    opacity: .88 !important;
+  }
+
+  .section,
+  .voice-banner,
+  .closing,
+  .auth-section {
+    background: rgba(255,255,255,.56) !important;
+  }
+}
