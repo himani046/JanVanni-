@@ -7,13 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 <div class="gov-strip"><span>Government • Citizen Services</span><span>मध्य प्रदेश • नागरिक सेवा</span><span>24×7 Voice Assistance</span></div>
 <header class="topbar">
   <a class="brand" href="#home"><span class="brand-seal">ज</span><span><strong>JANVAANI <em>AI</em></strong><small>जनवाणी • आपकी आवाज़, सरकारी कार्रवाई</small></span></a>
   <nav><a class="active" href="#home">Home <i>होम</i></a><a href="#report">Report <i>शिकायत</i></a><a href="#track">Track <i>ट्रैक</i></a><a href="#city">City Pulse <i>शहर</i></a><a href="#command">Command <i>कमांड</i></a></nav>
-  <div class="top-actions"><button class="access-btn" id="accessBtn">A− A+ <span>Accessibility</span></button><button class="lang-btn" id="langToggle">हिं</button></div>
+  <div class="portal-switch" role="tablist" aria-label="Portal selection"><button class="portal-btn active" data-portal="citizen">Citizen Portal<br><small>नागरिक पोर्टल</small></button><button class="portal-btn" data-portal="government">Government Portal<br><small>सरकारी पोर्टल</small></button></div><div class="top-actions"><button class="access-btn" id="accessBtn">A− A+ <span>Accessibility</span></button><button class="lang-btn" id="langToggle">हिं</button></div>
 </header>
 <main>
 <section class="hero reveal" id="home">
@@ -80,7 +81,63 @@
 <section class="section reveal"><div class="section-heading"><div><span class="eyebrow">05 • HOW IT WORKS</span><h2>Citizen से action तक.</h2><p>हर step transparent, trackable और explainable.</p></div></div>
   <div class="journey"><div class="journey-item"><span>01</span><div class="journey-icon">🎙</div><b>Citizen speaks</b><small>नागरिक बोलता है</small></div><div class="journey-connector"></div><div class="journey-item"><span>02</span><div class="journey-icon">🧠</div><b>AI understands</b><small>AI समझता है</small></div><div class="journey-connector"></div><div class="journey-item"><span>03</span><div class="journey-icon">🧩</div><b>Duplicates merge</b><small>समान शिकायतें जुड़ती हैं</small></div><div class="journey-connector"></div><div class="journey-item"><span>04</span><div class="journey-icon">📍</div><b>Ward routing</b><small>सही विभाग तक</small></div><div class="journey-connector"></div><div class="journey-item"><span>05</span><div class="journey-icon">⏱</div><b>SLA monitored</b><small>समयसीमा निगरानी</small></div><div class="journey-connector"></div><div class="journey-item"><span>06</span><div class="journey-icon">✓</div><b>Resolution verified</b><small>समाधान सत्यापित</small></div></div>
 </section>
-<section class="section reveal" id="command"><div class="section-heading"><div><span class="eyebrow">06 • JANVAANI COMMAND</span><h2>Government action dashboard.</h2><p>Citizen reports become an operational queue for civic teams.</p></div><span class="section-tag">OFFICER VIEW</span></div>
+
+<section class="section gov-portal reveal" id="governmentPortal">
+  <div class="gov-portal-head">
+    <div><span class="eyebrow">GOVERNMENT PORTAL • अधिकारी डैशबोर्ड</span><h2>Complaint operations & verified closure.</h2><p>Live incidents, AI evidence analysis, severity, recommended action and resolution proof — in one government workspace.</p></div>
+    <span class="official-badge">AUTHORIZED OFFICER VIEW</span>
+  </div>
+  <div class="gov-kpis">
+    <div><small>OPEN COMPLAINTS</small><strong>59</strong><span>+8 today</span></div>
+    <div class="warning"><small>SLA AT RISK</small><strong>12</strong><span>high priority</span></div>
+    <div class="success"><small>RESOLVED TODAY</small><strong>21</strong><span>awaiting audit</span></div>
+    <div><small>AI VERIFIED</small><strong>94%</strong><span>evidence confidence</span></div>
+  </div>
+  <div class="gov-layout">
+    <div class="gov-panel map-panel">
+      <div class="panel-title"><div><span class="eyebrow">LIVE MAP</span><h3>Municipal incident map</h3><small>Live-ready map layer • ward, priority and complaint locations</small></div><button id="locateOfficer" class="small-outline">📍 My location</button></div>
+      <div id="liveMap" class="live-map" aria-label="Live municipal incident map"></div>
+      <div class="map-note"><span><i class="legend-dot high-dot"></i> High severity</span><span><i class="legend-dot med-dot"></i> Medium</span><span><i class="legend-dot ok-dot"></i> Resolved</span><span id="mapFeedStatus">● Live feed ready</span></div>
+    </div>
+    <div class="gov-panel queue-panel">
+      <div class="panel-title"><div><span class="eyebrow">PRIORITY QUEUE</span><h3>Cases requiring action</h3></div><span class="live-badge"><i></i> LIVE</span></div>
+      <div class="gov-case selected"><span class="severity high">HIGH</span><div><b>JV-IND-0482 • Pothole cluster</b><small>Ward 22 • Road Maintenance • 23 linked reports</small></div><strong>68%</strong></div>
+      <div class="gov-case"><span class="severity high">HIGH</span><div><b>JV-IND-0521 • Waterlogging</b><small>Ward 09 • Drainage • 17 reports</small></div><strong>91%</strong></div>
+      <div class="gov-case"><span class="severity medium">MED</span><div><b>JV-BPL-0193 • Garbage overflow</b><small>Ward 14 • Sanitation • 9 reports</small></div><strong>54%</strong></div>
+      <div class="gov-case"><span class="severity low">LOW</span><div><b>JV-UJJ-0088 • Streetlight</b><small>Ward 31 • Electrical • 3 reports</small></div><strong>32%</strong></div>
+    </div>
+  </div>
+  <div class="gov-ai-grid">
+    <div class="gov-panel ai-panel">
+      <div class="panel-title"><div><span class="eyebrow">01 • COMPUTER VISION</span><h3>Analyze citizen evidence</h3><small>Upload the citizen's photo to assess issue type, severity and recommended action.</small></div><span class="cv-badge">AI VISION</span></div>
+      <div class="upload-zone" id="govUploadZone">
+        <input id="govVisionInput" type="file" accept="image/*" hidden>
+        <div class="upload-icon">📷</div><b>Upload complaint image</b><span>JPG / PNG • evidence is analyzed before officer action</span>
+        <button id="govChooseImage" class="primary-btn compact">Choose photo</button>
+        <div id="govVisionPreview" class="gov-image-preview hidden"></div>
+      </div>
+      <button id="analyzeVision" class="wide-action">🧠 Analyze with Computer Vision</button>
+      <div id="visionResult" class="vision-result hidden">
+        <div class="vision-top"><span class="cv-badge">AI ANALYSIS</span><span id="visionConfidence">94% confidence</span></div>
+        <div class="vision-main"><div><small>DETECTED ISSUE</small><h3 id="visionCategory">Pothole / Road Damage</h3></div><div class="severity-score"><small>SEVERITY</small><strong id="visionSeverity">4.2/5</strong></div></div>
+        <div class="action-box"><b>Recommended actions</b><ul id="visionActions"><li>Dispatch road-maintenance inspection team.</li><li>Place temporary hazard warning if traffic risk is high.</li><li>Repair surface and capture an after-image.</li></ul></div>
+      </div>
+    </div>
+    <div class="gov-panel closure-panel">
+      <div class="panel-title"><div><span class="eyebrow">02 • VERIFIED CLOSURE</span><h3>Close only after proof</h3><small>A complaint cannot be marked resolved until an authorized officer uploads resolution evidence.</small></div><span class="lock-badge">🔒 LOCKED</span></div>
+      <div class="closure-case"><span>ACTIVE CASE</span><b id="closureCaseId">JV-IND-0482</b><small>Current status: <strong id="closureStatus">Inspection</strong></small></div>
+      <div class="before-after-mini"><div><span>BEFORE</span><div class="evidence-box before">🚧<small>Citizen evidence</small></div></div><div class="arrow">→</div><div><span>AFTER</span><div class="evidence-box after" id="afterEvidence">＋<small>Upload resolution photo</small></div></div></div>
+      <input id="resolutionInput" type="file" accept="image/*" hidden>
+      <button id="chooseResolution" class="outline-action">📷 Upload after / resolution image</button>
+      <div id="resolutionCheck" class="resolution-check">⏳ Resolution evidence required before closure.</div>
+      <button id="closeComplaint" class="close-action" disabled>🔒 Close complaint</button>
+      <p class="closure-note">AI verification is an assistive signal. Final closure remains under authorized officer control.</p>
+    </div>
+  </div>
+  <div class="gov-actions"><button class="outline-action" data-portal-jump="citizen">← Open Citizen Portal</button><span>Audit-ready workflow • evidence → action → proof → closure</span></div>
+</section>
+
+<section class="section reveal gov-command-section" id="command"><div class="section-heading"><div><span class="eyebrow">06 • JANVAANI COMMAND</span><h2>Government action dashboard.</h2><p>Citizen reports become an operational queue for civic teams.</p></div><span class="section-tag">OFFICER VIEW</span></div>
   <div class="command-dashboard"><div class="command-top"><div class="command-kpi"><span>Open</span><strong>59</strong><small>incidents</small></div><div class="command-kpi warning"><span>SLA risk</span><strong>12</strong><small>high priority</small></div><div class="command-kpi success"><span>Resolved</span><strong>21</strong><small>today</small></div><div class="command-kpi"><span>Avg. action</span><strong>18h</strong><small>next step</small></div></div>
     <div class="command-body"><div class="risk-table"><div class="table-head"><b>Priority queue</b><span>Ward • category • risk</span></div><button><em class="high">HIGH</em><span><b>Waterlogging</b><small>Ward 09 • Drainage</small></span><strong>91%</strong><i>→</i></button><button class="selected"><em class="medium">MED</em><span><b>Pothole cluster</b><small>Ward 22 • Road Maintenance</small></span><strong>68%</strong><i>→</i></button><button><em class="medium">MED</em><span><b>Garbage overflow</b><small>Ward 14 • Sanitation</small></span><strong>54%</strong><i>→</i></button><button><em class="low">LOW</em><span><b>Streetlight outage</b><small>Ward 31 • Electrical</small></span><strong>32%</strong><i>→</i></button></div>
       <div class="command-detail"><div class="detail-visual"><img src="assets/dashboard-scene.svg" alt="Civic operations illustration"></div><span class="eyebrow">AI TRIAGE • JV-IND-0482</span><h3>Pothole severity <strong>4.2/5</strong></h3><p>Heavy traffic corridor • two-wheeler hazard • 23 linked citizen reports.</p><div class="mini-bars"><span style="width:84%"><i>Severity</i></span><span style="width:68%"><i>SLA risk</i></span><span style="width:94%"><i>Evidence confidence</i></span></div><button class="primary-btn compact" data-voice>🎙 Hear incident summary</button></div></div>
@@ -99,6 +156,7 @@
   <p class="voice-foot">Microphone permission दें. Production में यही layer Indic ASR + neural TTS providers से connect की जा सकती है.</p>
 </div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
