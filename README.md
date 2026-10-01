@@ -108,3 +108,87 @@ JanVanni-/
 **Voice first. Government action next.**
 
 The citizen should not have to learn how to use a ticketing system. They should be able to speak naturally, receive a clear spoken answer, and only see detailed dashboards when they want them.
+
+
+## Dual-Portal Government Workflow
+
+The current frontend now provides two explicit interfaces:
+
+- **Citizen Portal (नागरिक पोर्टल):** voice-first complaint reporting, photo evidence, location context, complaint tracking and Saathi status assistant.
+- **Government Portal (सरकारी पोर्टल):** live map, priority queue, computer-vision evidence analysis, severity/action recommendations and controlled resolution closure.
+
+### Government Portal flow
+
+```text
+Citizen complaint
+      ↓
+Live incident map + priority queue
+      ↓
+Officer opens evidence
+      ↓
+Computer Vision analysis
+      ↓
+Issue + severity + recommended actions
+      ↓
+Field action
+      ↓
+Officer uploads AFTER / resolution image
+      ↓
+AI verification
+      ↓
+Complaint can be closed by authorized officer
+```
+
+The closure button remains locked until resolution evidence is uploaded in the prototype. In production, the verification service should compare the original and after images and record an audit trail.
+
+## Live Map
+
+The Government Portal uses a Leaflet/OpenStreetMap map layer for the prototype. It shows MP incident markers and supports officer geolocation. The marker feed is currently demo data; connect it to a PostGIS-backed incident API for production live updates.
+
+## Computer Vision
+
+The Government Portal contains an evidence-analysis workflow that returns:
+
+- detected civic issue
+- severity score
+- confidence
+- recommended field actions
+
+The repository currently exposes `POST /api/v1/vision/analyze` as an MVP adapter. It is deterministic for demonstration and should be replaced with a trained CV/VLM inference service before production.
+
+## Local Language Voice
+
+Target voice modes now include:
+
+- Hindi
+- English
+- Malvi / Malwai
+- Bundelkhandi
+- Nimadi
+- Bagheli
+- Gondi
+
+The browser demo uses Hindi speech fallback for dialect modes where the browser does not expose a dedicated locale. Production should connect dialect-specific ASR/TTS through an Indic language service such as BHASHINI. BHASHINI provides ASR, TTS, language detection and other Indian-language services and is designed for multilingual digital access. 
+
+## Local Run
+
+Frontend:
+
+```bash
+cd ~/Downloads/JanVanni-
+python3 -m http.server 5501
+```
+
+Open `http://localhost:5501`.
+
+Backend:
+
+```bash
+cd ~/Downloads/JanVanni-
+source venv/bin/activate
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Health: `http://127.0.0.1:8000/health`
+
+The frontend will fall back to demo responses when the backend is unavailable.
