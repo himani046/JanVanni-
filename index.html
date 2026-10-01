@@ -36,18 +36,50 @@
   </div></div>
  </section>
 
- <!-- Talk to Saathi banner + chatbot -->
- <section class="saathi" id="saathi">
-  <div class="sb"><div class="mic">🎙</div>
-   <div class="tx"><div class="eye">AI Chatbot · Live ready</div><h2>Talk to Saathi <span class="h" style="display:inline;font-size:.6em">साथी से बात करें</span></h2>
-   <p>Describe the problem in your own words. Saathi asks follow-up questions instead of rejecting vague complaints.</p>
-   <span class="qt">“हमार गली मा पानी भर गवा है…” <small style="color:var(--mut)">· Dialect → structured complaint</small></span></div>
-   <button class="btn p" id="talk" onclick="startVoiceComplaint()">Talk now · बात करें</button></div>
-  <div class="chat" id="chat">
-   <div class="chat-h"><span>● Saathi · online</span><button id="cx" aria-label="Close chat" title="Close chat">✕</button></div>
-   <div class="msgs" id="msgs" aria-live="polite"></div>
-   <div class="qr" id="qr"></div>
-   <div class="in"><input id="ci" placeholder="Type or speak… यहाँ लिखें या बोलें" aria-label="Message"><button class="mc" id="mc" aria-label="Speak">🎙</button><button id="send">Send</button></div></div>
+ <!-- Voice-first Saathi -->
+ <section class="saathi voice-saathi" id="saathi">
+  <div class="voice-head">
+   <div class="voice-brand">
+    <div class="mic">🎙</div>
+    <div class="tx">
+     <div class="eye">AI VOICE ASSISTANT · LIVE</div>
+     <h2>Talk to Saathi <span class="h" style="display:inline;font-size:.6em">साथी से बात करें</span></h2>
+     <p>Speak naturally. Saathi listens, understands your language and replies back with voice — like a real conversation.</p>
+    </div>
+   </div>
+   <div class="voice-status"><span class="live-dot"></span><b>Saathi is ready</b><small>बोलकर शिकायत दर्ज करें</small></div>
+  </div>
+
+  <div class="voice-console" id="voice-console">
+   <div class="voice-orb-wrap">
+    <div class="voice-ring ring-1"></div>
+    <div class="voice-ring ring-2"></div>
+    <button class="voice-orb" id="voice-orb" type="button" aria-label="Start talking to Saathi">
+      <span class="voice-icon">🎙</span>
+      <span class="voice-orb-label">बोलें</span>
+    </button>
+   </div>
+   <div class="voice-copy">
+    <div class="voice-state" id="voice-state">Tap the microphone and speak</div>
+    <div class="voice-state-hi" id="voice-state-hi">माइक दबाएँ और अपनी समस्या बताइए</div>
+    <div class="voice-transcript" id="voice-transcript">आपकी आवाज़ यहाँ दिखाई देगी…</div>
+    <div class="voice-reply" id="voice-reply">साथी आपकी बात सुनकर आपको आवाज़ में जवाब देगा।</div>
+   </div>
+  </div>
+
+  <div class="voice-actions">
+   <button class="btn p" id="talk" type="button">🎙 Start conversation · बातचीत शुरू करें</button>
+   <button class="btn" id="voice-stop" type="button">■ Stop</button>
+   <select id="voice-language" aria-label="Voice language">
+    <option value="hi-IN">हिंदी</option>
+    <option value="en-IN">English</option>
+    <option value="mal-IN">Malvi</option>
+    <option value="nim-IN">Nimadi</option>
+    <option value="bnd-IN">Bundelkhandi</option>
+    <option value="bag-IN">Bagheli</option>
+    <option value="gon-IN">Gondi</option>
+   </select>
+  </div>
  </section>
 
  <!-- Stats strip -->
