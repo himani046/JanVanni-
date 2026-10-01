@@ -339,6 +339,82 @@ const ISSUES = ["Road / Pothole", "Waterlogging", "Garbage", "Streetlight"];
 })();
 
 /* =====================================================================
+   4. LIVE MAP — Leaflet + OpenStreetMap + JanVaani incident API
+   ===================================================================== */
+(() => {
+  const el = $("live-map");
+  if (!el || !window.L) return;
+  const map = L.map(el, { zoomControl: true }).setView([23.2599, 77.4126], 6);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'
+  }).addTo(map);
+
+  const markers = L.layerGroup().addTo(map);
+  let heat = null;
+  let userMarker = null;
+
+  function color(severity) {
+    if (severity >= 4) return "#e74c3c";
+    if (severity >= 3) return "#e67e22";
+    return "#168a68";
+  }
+
+  function draw(incidents) {
+    markers.clearLayers();
+    const points = [];
+    (incidents || []).forEach((x) => {
+      const sev = Number(x.severity || 2);
+      points.push([x.lat, x.lon, Math.max(.25, sev / 5)]);
+      L.circleMarker([x.lat, x.lon], {
+        radius: sev >= 4 ? 9 : 7, color: color(sev), weight: 2,
+        fillColor: color(sev), fillOpacity: .85
+      }).bindPopup(
+        "<b>"+(x.category||"Civic issue")+"</b><br>Complaint: "+(x.id||"—")+
+        "<br>Ward: "+(x.ward||"—")+"<br>City: "+(x.city||"—")+
+        "<br>Severity: "+sev+"/5<br>Status: "+(x.status||"Open")
+      ).addTo(markers);
+    });
+    if (heat) map.removeLayer(heat);
+    if (window.L.heatLayer) heat=L.heatLayer(points,{radius:32,blur:24,maxZoom:12,max:1}).addTo(map);
+  }
+
+  async function refresh() {
+    const status=$("map-status");
+    status.textContent="Loading live incidents…";
+    try {
+      const res=await fetch(API_BASE+"/api/v1/map/incidents",{cache:"no-store"});
+      if(!res.ok) throw new Error("API "+res.status);
+      const data=await res.json();
+      draw(data.incidents);
+      $("map-open").textContent=data.summary.open;
+      $("map-high").textContent=data.summary.high;
+      $("map-resolved").textContent=data.summary.resolved_today;
+      status.textContent="● Live API connected · updated just now";
+    } catch(e) {
+      status.textContent="Map loaded, but incident API is unavailable.";
+    }
+  }
+
+  $("map-refresh").onclick=refresh;
+  $("map-locate").onclick=()=>{
+    if(!navigator.geolocation) return;
+    $("map-status").textContent="Finding your location…";
+    navigator.geolocation.getCurrentPosition((p)=>{
+      const lat=p.coords.latitude,lon=p.coords.longitude;
+      if(userMarker) map.removeLayer(userMarker);
+      userMarker=L.circleMarker([lat,lon],{radius:9,color:"#168a68",fillColor:"#37d6a0",fillOpacity:1,weight:3})
+        .addTo(map).bindPopup("<b>You are here</b>").openPopup();
+      map.setView([lat,lon],14);
+      $("map-status").textContent="● Your live GPS location is shown";
+    },()=>{$("map-status").textContent="Location permission was blocked.";});
+  };
+  setTimeout(()=>map.invalidateSize(),250);
+  refresh();
+  setInterval(refresh,60000);
+})();
+
+/* =====================================================================
    4. FIND THE RIGHT AUTHORITY
    Issue type + city -> who is responsible and where to escalate.
    "Use my location" picks the nearest listed city. Demo data: confirm
