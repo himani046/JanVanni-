@@ -7,7 +7,8 @@
 /* ---------------------------------------------------------------------
    CONFIG — put your own photos here.
    Save monument photos inside the /images folder and list them, e.g.
-     const BG_IMAGES = [
+     const API_BASE = "https://janvanni-backend.onrender.com";
+const BG_IMAGES = [
   "assets/monuments/monument-01.jpg",
   "assets/monuments/monument-02.jpg",
   "assets/monuments/monument-03.jpg",
@@ -199,12 +200,28 @@ renderBackground();
                "Garbage not collected", "Streetlight not working"]);
   }
 
-  function send(text) {
+  async function send(text) {
     text = text.trim();
     if (!text) return;
     addBubble(text, "me");
     input.value = "";
     $("qr").innerHTML = "";
+
+    if (step === 0) {
+      try {
+        const res = await fetch(API_BASE + "/api/v1/voice/respond", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({text, language: "hi-IN"})
+        });
+        if (res.ok) {
+          const data = await res.json();
+          addBubble(data.reply_text || "साथी ने आपकी बात समझ ली।", "bot");
+        }
+      } catch (e) {
+        // Keep the local demo fallback below if the API is temporarily unavailable.
+      }
+    }
 
     setTimeout(() => {
       if (step === 0) {
