@@ -37,6 +37,18 @@ class VoiceRequest(BaseModel):
     language: str = "hi-IN"
 
 
+class VisionRequest(BaseModel):
+    image_base64: str
+    filename: str = "evidence.jpg"
+    complaint_id: str = "JV-IND-0482"
+
+
+class ResolutionProofRequest(BaseModel):
+    complaint_id: str
+    after_image_base64: str
+    verification_mode: str = "demo"
+
+
 DEMO_COMPLAINT = {
     "id": "JV-IND-0482",
     "ward": "Ward 22",
@@ -154,3 +166,20 @@ def voice_respond(payload: VoiceRequest):
         "mode": "voice",
         "complaint_id": DEMO_COMPLAINT["id"],
     }
+
+
+
+@app.post("/api/v1/vision/analyze")
+def analyze_vision(payload: VisionRequest):
+    """MVP CV adapter. Replace with a trained CV/VLM inference service in production."""
+    name = payload.filename.lower()
+    if any(k in name for k in ["garbage", "waste", "kachra"]):
+        return {"category":"Garbage / Waste Accumulation","severity":"3.6/5","confidence":"92%","actions":["Dispatch sanitation collection team.","Inspect whether the site is a recurring dumping hotspot.","Upload an after-image after removal and cleaning."],"mode":"demo-cv"}
+    if any(k in name for k in ["water", "flood", "drain", "pani"]):
+        return {"category":"Waterlogging / Drainage","severity":"4.5/5","confidence":"93%","actions":["Dispatch drainage response team.","Inspect blockage and public-safety risk.","Clear the obstruction and upload resolution evidence."],"mode":"demo-cv"}
+    return {"category":"Pothole / Road Damage","severity":"4.2/5","confidence":"94%","actions":["Dispatch road-maintenance inspection team.","Place temporary hazard warning if traffic risk is high.","Repair the surface and capture an after-image."],"mode":"demo-cv"}
+
+
+@app.post("/api/v1/complaints/{complaint_id}/resolution-proof")
+def resolution_proof(complaint_id: str, payload: ResolutionProofRequest):
+    return {"complaint_id":complaint_id,"verification":"passed","verification_score":94,"status":"ready_for_officer_closure","message":"Resolution evidence received. Final closure remains an authorized officer action."}
