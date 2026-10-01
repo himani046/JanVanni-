@@ -8,15 +8,10 @@
    CONFIG — put your own photos here.
    Save monument photos inside the /images folder and list them, e.g.
      const BG_IMAGES = [
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Jahangir%20Mahal%20of%20Orchha%20Place.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Sanchi%20Stupa%2C%20Sanchi%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%2C%20Gwalior%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Jahaz%20Mahal%2C%20Mandu%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20Rock%20Shelters.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%2C%20Morena.jpg"
+  "assets/monuments/monument-01.jpg",
+  "assets/monuments/monument-02.jpg",
+  "assets/monuments/monument-03.jpg",
+  "assets/monuments/monument-04.jpg"
 ];
    Photos added with the "Add photos" button are kept in the browser
    (localStorage) and shown after these.
@@ -29,7 +24,7 @@ const BG_IMAGES = [
   "https://images.moondeveloper.com/attractions/2025/01/25/67948ee31baca.jpg",
   "https://static.toiimg.com/img/65686862/Master.jpg"
 ];
-const SLIDE_MS   = 5200;   // time each photo stays on screen
+const SLIDE_MS   = 5000;   // time each photo stays on screen
 const MAX_UPLOAD = 24;     // max number of browser-stored photos
 const STORE_KEY  = "jv_photos";
 
