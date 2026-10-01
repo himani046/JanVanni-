@@ -9,7 +9,7 @@
   --or:#FF7A1A;
   --or2:#FFB13B;
   --gr:#37D6A0;
-  color-scheme:dark;
+  color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px)
