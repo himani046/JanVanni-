@@ -78,7 +78,7 @@ def draft_complaint(payload: ComplaintDraft):
 
 
 def is_hindi(language: str, text: str) -> bool:
-    return language.startswith("hi") or bool(
+    return language.startswith(("hi","mal","bnd","nim","bag","gon")) or bool(
         re.search(r"[ऀ-ॿ]|शिकायत|रिपोर्ट|स्थिति|कब तक|विभाग|गड्ढा|पानी", text.lower())
     )
 
