@@ -83,3 +83,123 @@ listenOrb.addEventListener("click",startListening);$("#repeatVoice").addEventLis
   resolutionInput?.addEventListener("change",()=>{const f=resolutionInput.files?.[0];if(!f)return;after.innerHTML="<img src='"+URL.createObjectURL(f)+"' alt='Resolution evidence' style='max-width:100%;max-height:100%;border-radius:10px;object-fit:cover'><small>Resolution evidence</small>";check.classList.add("pass");check.textContent="✓ Resolution evidence uploaded. AI verification passed for demo review.";close.disabled=false;toast("Resolution proof uploaded")});
   close?.addEventListener("click",()=>{if(close.disabled)return;$("#closureStatus").textContent="Resolved / Closed";close.textContent="✓ Complaint Closed";close.disabled=true;check.textContent="✓ Closed after resolution evidence review.";toast("Complaint closed after proof-of-resolution")});
 })();
+
+/* =========================================================
+   JANVAANI DIALECT + MP HERITAGE LAYER
+   ========================================================= */
+(function(){
+  /* Background inspired by the supplied reference video:
+     a slow cross-fade through MP heritage sites, while the
+     foreground stays white like a government portal. */
+  const monuments=[
+    ["Jahangir Mahal · Orchha","https://commons.wikimedia.org/wiki/Special:FilePath/Jahangir%20Mahal%20of%20Orchha%20Place.jpg"],
+    ["Sanchi Stupa · Raisen","https://commons.wikimedia.org/wiki/Special:FilePath/Sanchi%20Stupa%2C%20Sanchi%2C%20Madhya%20Pradesh.jpg"],
+    ["Khajuraho Temples · Chhatarpur","https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg"],
+    ["Ahilya Fort · Maheshwar","https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg"],
+    ["Gwalior Fort · Gwalior","https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%20of%20Madhya%20Pradesh.jpg"],
+    ["Bhojeshwar Temple · Bhojpur","https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg"]
+  ];
+  const stage=document.createElement("div");
+  stage.className="mp-monument-stage";
+  stage.setAttribute("aria-hidden","true");
+  monuments.forEach((m,i)=>{
+    const s=document.createElement("div");
+    s.className="mp-monument-slide"+(i===0?" active":"");
+    s.style.backgroundImage="url('"+m[1]+"')";
+    s.dataset.monument=m[0];
+    stage.appendChild(s);
+  });
+  document.body.prepend(stage);
+  let current=0;
+  setInterval(()=>{
+    const slides=[...stage.children];
+    slides[current]?.classList.remove("active");
+    current=(current+1)%slides.length;
+    slides[current]?.classList.add("active");
+  },5200);
+
+  /* Local dialect response layer. The backend returns the same
+     dialect text; this frontend only handles speech output. */
+  const dialectLocale={
+    "hi-IN":"hi-IN","en-IN":"en-IN",
+    "mal-IN":"hi-IN","bnd-IN":"hi-IN","nim-IN":"hi-IN",
+    "bag-IN":"hi-IN","gon-IN":"hi-IN","kha-IN":"hi-IN"
+  };
+  const dialectNames={
+    "mal-IN":"मालवी","bnd-IN":"बुंदेली","nim-IN":"निमाड़ी",
+    "bag-IN":"बघेली","gon-IN":"गोंडी","kha-IN":"खंडी"
+  };
+
+  /* Prefer an exact local voice if the browser/OS exposes one.
+     Otherwise use the best Hindi voice to pronounce the dialect
+     text rather than silently switching the response back to Hindi. */
+  window.JANVAANI_DIALECT_LOCALES=dialectLocale;
+  window.JANVAANI_DIALECT_NAMES=dialectNames;
+
+  function bestDialectVoice(lang){
+    if(!("speechSynthesis" in window)) return null;
+    const voices=speechSynthesis.getVoices();
+    const exact=voices.find(v=>v.lang?.toLowerCase()===lang.toLowerCase());
+    if(exact) return exact;
+    const prefix=lang.split("-")[0].toLowerCase();
+    const same=voices.find(v=>v.lang?.toLowerCase().startsWith(prefix));
+    if(same) return same;
+    return voices.find(v=>v.lang?.toLowerCase().startsWith("hi-in")) ||
+           voices.find(v=>v.lang?.toLowerCase().startsWith("hi")) ||
+           voices.find(v=>v.lang?.toLowerCase().startsWith("en-in")) ||
+           voices[0] || null;
+  }
+
+  /* Override the previous generic Hindi mapping. */
+  window.JANVAANI_SPEAK_DIALECT=function(text,lang){
+    lastReply=text;
+    if(!("speechSynthesis" in window)){setVoiceState("ready");return;}
+    stopSpeaking();
+    const u=new SpeechSynthesisUtterance(text);
+    const target=dialectLocale[lang]||lang||"hi-IN";
+    u.lang=target;
+    u.rate=target.startsWith("hi")?.90:.96;
+    u.pitch=1.02;
+    const v=bestDialectVoice(lang);
+    if(v) u.voice=v;
+    u.onstart=()=>setVoiceState("speaking");
+    u.onend=()=>setVoiceState("ready");
+    u.onerror=()=>setVoiceState("ready");
+    sheet.classList.add("speaking");
+    speechSynthesis.speak(u);
+  };
+
+  /* Replace reply retrieval so selected dialect controls the
+     language of the answer returned by FastAPI. */
+  const oldGetReply=window.getReply;
+  window.getReply=async function(text){
+    try{
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),2500);
+      const r=await fetch((window.JANVAANI_API_BASE||"http://127.0.0.1:8000")+
+        "/api/v1/voice/respond",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({text:text,language:selectedLanguage}),
+          signal:controller.signal
+        });
+      clearTimeout(timer);
+      if(r.ok){
+        const d=await r.json();
+        if(d?.reply_text) return d.reply_text;
+      }
+    }catch(e){}
+    return typeof oldGetReply==="function"?oldGetReply(text):localReply(text);
+  };
+
+  /* Replace speak() with the dialect-aware speaker. */
+  window.speak=function(text,lang=selectedLanguage){
+    JANVAANI_SPEAK_DIALECT(text,lang);
+  };
+
+  /* Voice selector label now makes the active local mode obvious. */
+  voiceLang?.addEventListener("change",()=>{
+    const label=dialectNames[voiceLang.value];
+    if(label) toast(label+" voice mode selected · स्थानीय बोली सक्रिय");
+  });
+})();
