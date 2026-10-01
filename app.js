@@ -51,3 +51,6 @@ function route() {
   if (target === "admin-view" && window.renderAdmin) renderAdmin();
 }
 addEventListener("hashchange", route);
+// Initialize the correct view on first page load as well as on hash changes.
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", route);
+else route();
