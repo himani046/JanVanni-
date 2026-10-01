@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
 <!-- Full-page blurred photo background (filled by script.js) -->
@@ -107,17 +108,22 @@
   </div>
  </section>
 
- <!-- Map + heatmap -->
- <section class="sec">
-  <div class="eye">Geo + Heatmap</div><h2>From location to action.</h2><span class="h">लोकेशन से शिकायत तक — एक ही दृश्य में</span>
-  <div class="split">
-   <div class="card map"><svg viewBox="0 0 600 340"><defs><radialGradient id="rg"><stop offset="0" stop-color="#FF5A5A" stop-opacity=".9"/><stop offset="1" stop-color="#FF5A5A" stop-opacity="0"/></radialGradient></defs>
-    <path d="M60 190L130 110L290 92L400 120L520 170L470 215L360 260L250 250L130 235Z" fill="#1B3A8C" stroke="#4E6EDC" stroke-opacity=".6"/>
-    <circle cx="140" cy="175" r="42" fill="url(#rg)"/><circle cx="360" cy="205" r="52" fill="url(#rg)"/><circle cx="440" cy="150" r="26" fill="url(#rg)"/><circle cx="235" cy="220" r="30" fill="url(#rg)"/><circle cx="210" cy="180" r="7" fill="#37D6A0"/>
-    <g fill="#F4EFE6" font-size="12" font-family="Hind"><text x="110" y="172">Indore · 23</text><text x="335" y="210">Bhopal · 17</text><text x="420" y="146">Rewa · 8</text><text x="212" y="240">Ujjain · 11</text><text x="185" y="200" fill="#37D6A0">You are here</text></g></svg></div>
-   <div class="kp"><div class="card"><span class="tag">Open incidents</span><b>59</b><small style="color:var(--mut)">+8 today</small></div><div class="card"><span class="tag">High priority</span><b style="color:var(--or2)">12</b><small style="color:var(--mut)">SLA at risk</small></div><div class="card"><span class="tag">Resolved today</span><b style="color:var(--gr)">21</b><small style="color:var(--mut)">Verified by AI</small></div></div>
+ <!-- Live map + heatmap -->
+ <section class="sec" id="live-map-section">
+  <div class="eye">LIVE GEO + HEATMAP</div><h2>Live civic incident map.</h2><span class="h">रीयल-टाइम शिकायतें • GPS • severity • heatmap</span>
+  <div class="live-map-toolbar">
+   <div class="map-legend"><span><i class="legend-dot high"></i>High</span><span><i class="legend-dot medium"></i>Medium</span><span><i class="legend-dot low"></i>Low</span><span><i class="legend-dot you"></i>You</span></div>
+   <div class="map-actions"><button class="mini" id="map-locate" type="button">📍 My location</button><button class="mini" id="map-refresh" type="button">↻ Refresh</button></div>
+  </div>
+  <div class="live-map-wrap"><div id="live-map" class="live-map" aria-label="Live JanVaani incident map"></div><div id="map-status" class="map-status">Loading live incidents…</div></div>
+  <div class="map-summary">
+   <div class="card"><span class="tag">Open incidents</span><b id="map-open">—</b><small>from JanVaani API</small></div>
+   <div class="card"><span class="tag">High priority</span><b id="map-high">—</b><small>SLA attention</small></div>
+   <div class="card"><span class="tag">Resolved today</span><b id="map-resolved">—</b><small>verified cases</small></div>
   </div>
  </section>
+
+</section>
 
  <!-- Complaint tracking -->
  <section class="sec" id="track">
@@ -185,6 +191,8 @@
   JanVaani AI · जनवाणी — Made for the people of Madhya Pradesh
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 <script src="script.js"></script>
 <script src="app.js"></script>
 <script src="register.js"></script>
