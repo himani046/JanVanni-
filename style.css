@@ -770,4 +770,4 @@ footer {
 #bg{position:fixed!important;inset:0!important;z-index:0!important;overflow:hidden!important;background:#dfe8ed!important;pointer-events:none!important}
 #bg img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;filter:none!important;opacity:0!important;transition:opacity 1.35s ease-in-out!important}
 #bg img.bg-visible{opacity:.94!important}
-#bg:after{content:""!important;position:absolute!important;inset:0!important;background:rgba(255,255,255,.08)!important;pointer-events:none!important}
+#bg:after{content:""!important;position:absolute!important;inset:0!important;background:rgba(10,24,36,.34)!important;backdrop-filter:blur(1.5px)!important;-webkit-backdrop-filter:blur(1.5px)!important;pointer-events:none!important}
