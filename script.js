@@ -48,7 +48,7 @@ function renderBackground() {
   const bg = $("bg");
   if (!bg) return;
   if (!list.length) { bg.innerHTML = ""; return; }
-  if (!bg.children.length) bg.innerHTML = \`<img class="bg-layer" alt=""><img class="bg-layer" alt="">\`;
+  if (!bg.children.length) bg.innerHTML = `<img class="bg-layer" alt=""><img class="bg-layer" alt="">`;
   const nextIndex = bgLayer === 0 ? 1 : 0;
   const nextLayer = bg.children[nextIndex];
   const oldLayer = bg.children[bgLayer];
