@@ -97,7 +97,10 @@ listenOrb.addEventListener("click",startListening);$("#repeatVoice").addEventLis
     ["Khajuraho Temples · Chhatarpur","https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg"],
     ["Ahilya Fort · Maheshwar","https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg"],
     ["Gwalior Fort · Gwalior","https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%20of%20Madhya%20Pradesh.jpg"],
-    ["Bhojeshwar Temple · Bhojpur","https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg"]
+    ["Bhojeshwar Temple · Bhojpur","https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg"],
+    ["Mandu · Dhar","https://commons.wikimedia.org/wiki/Special:FilePath/Jahaz%20Mahal%2C%20Mandu%2C%20Madhya%20Pradesh.jpg"],
+    ["Bhimbetka Rock Shelters · Raisen","https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20rock%20shelters.jpg"],
+    ["Chausath Yogini Temple · Morena","https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%20Morena.jpg"]
   ];
   const stage=document.createElement("div");
   stage.className="mp-monument-stage";
