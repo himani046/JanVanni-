@@ -22,15 +22,12 @@
    (localStorage) and shown after these.
 --------------------------------------------------------------------- */
 const BG_IMAGES = [
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Jahangir%20Mahal%20of%20Orchha%20Place.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Sanchi%20Stupa%2C%20Sanchi%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Khajuraho%20Temple-Madhya%20Pradesh-IMG%208406.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Ahilya%20Fort.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Gwalior%20Fort%2C%20Gwalior%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhojeshwar%20Temple.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Jahaz%20Mahal%2C%20Mandu%2C%20Madhya%20Pradesh.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Bhimbetka%20Rock%20Shelters.jpg",
-  "https://commons.wikimedia.org/wiki/Special:FilePath/Chausath%20Yogini%20Temple%2C%20Morena.jpg"
+  // Direct image files — do not use Special:FilePath redirects here.
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Jahangir_Mahal%2C_Orchha%2C_Madhya_Pradesh%2C_India.jpg/1280px-Jahangir_Mahal%2C_Orchha%2C_Madhya_Pradesh%2C_India.jpg",
+  "https://www.guiadasemana.com.br/contentFiles/image/2020/06/FEA/65762_shutterstock-295945166-1.jpg",
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Khajuraho_Temple-Madhya_Pradesh-IMG_8473.jpg/1280px-Khajuraho_Temple-Madhya_Pradesh-IMG_8473.jpg",
+  "https://images.moondeveloper.com/attractions/2025/01/25/67948ee31baca.jpg",
+  "https://static.toiimg.com/img/65686862/Master.jpg"
 ];
 const SLIDE_MS   = 5200;   // time each photo stays on screen
 const MAX_UPLOAD = 24;     // max number of browser-stored photos
@@ -61,7 +58,9 @@ function renderBackground() {
   const nextLayer = bg.children[nextIndex];
   const oldLayer = bg.children[bgLayer];
   nextLayer.onload = () => { nextLayer.classList.add("bg-visible"); oldLayer.classList.remove("bg-visible"); bgLayer = nextIndex; };
+  nextLayer.onerror = () => { nextLayer.classList.remove("bg-visible"); bgLayer = nextIndex; };
   nextLayer.src = list[current % list.length];
+  nextLayer.classList.add("bg-visible");
 }
 
 /* Save to localStorage; if the quota is full, drop the oldest photos. */
