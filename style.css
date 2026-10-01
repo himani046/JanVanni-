@@ -804,3 +804,15 @@ footer {
   font-size: calc(1em + 4px) !important;
   font-weight: 700 !important;
 }
+
+/* Final requested size: 2px smaller */
+.eye,
+.badge,
+.kicker,
+.hero .kicker,
+.nav-kicker,
+.status,
+.tag {
+  font-size: calc(1em + 2px) !important;
+  font-weight: 700 !important;
+}
