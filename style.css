@@ -816,3 +816,37 @@ footer {
   font-size: calc(1em + 2px) !important;
   font-weight: 700 !important;
 }
+
+
+/* =====================================================================
+   JANVAANI — VOICE-FIRST SAATHI UI
+   Replaces the old chatbot look with a human-like voice conversation.
+   ===================================================================== */
+.voice-saathi{padding:30px 34px!important;background:rgba(255,255,255,.72)!important;border:1px solid rgba(35,62,82,.16)!important}
+.voice-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px}
+.voice-brand{display:flex;align-items:center;gap:20px;flex:1}
+.voice-brand .mic{width:72px;height:72px;min-width:72px}
+.voice-status{display:flex;flex-direction:column;align-items:flex-end;color:#168a68;font-size:14px}
+.voice-status small{color:#5c6d79;font-weight:500;margin-top:2px}
+.live-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#168a68;box-shadow:0 0 0 5px rgba(22,138,104,.12);margin-right:7px}
+.voice-console{display:flex;align-items:center;justify-content:center;gap:50px;min-height:290px;border-radius:24px;background:rgba(255,255,255,.48);border:1px solid rgba(35,62,82,.12);padding:28px}
+.voice-orb-wrap{position:relative;width:190px;height:190px;display:grid;place-items:center}
+.voice-orb{position:relative;z-index:3;width:132px;height:132px;border:0;border-radius:50%;background:linear-gradient(145deg,#ff9a27,#e85d0b);color:#fff;box-shadow:0 16px 40px rgba(232,106,22,.34);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .2s,box-shadow .2s}
+.voice-orb:hover{transform:scale(1.04)}
+.voice-orb.active{transform:scale(1.08);box-shadow:0 0 0 16px rgba(232,106,22,.12),0 0 0 34px rgba(232,106,22,.07),0 18px 45px rgba(232,106,22,.38)}
+.voice-icon{font-size:38px;line-height:1}
+.voice-orb-label{font:700 15px Hind}
+.voice-ring{position:absolute;border:2px solid rgba(232,106,22,.24);border-radius:50%;inset:15px;animation:voicePulse 2.2s infinite}
+.ring-2{inset:0;animation-delay:1.1s}
+@keyframes voicePulse{0%,100%{transform:scale(.82);opacity:.35}50%{transform:scale(1);opacity:.9}}
+.saathi-listening .ring-1,.saathi-listening .ring-2{animation-duration:.8s;border-color:rgba(22,138,104,.45)}
+.saathi-speaking .ring-1,.saathi-speaking .ring-2{animation-duration:1.2s;border-color:rgba(217,147,32,.5)}
+.voice-copy{max-width:620px;text-align:left}
+.voice-state{font:800 26px 'Bricolage Grotesque';color:#183247}
+.voice-state-hi{font-size:18px;color:#5c6d79;margin-top:4px}
+.voice-transcript{margin-top:22px;padding:12px 16px;border-left:3px solid #e86a16;background:rgba(255,255,255,.62);border-radius:10px;color:#435865;min-height:48px}
+.voice-reply{margin-top:10px;padding:14px 16px;background:rgba(22,138,104,.08);border-left:3px solid #168a68;border-radius:10px;color:#183247;font-size:16px;line-height:1.5;min-height:56px}
+.voice-actions{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+.voice-actions select{padding:12px 15px;border-radius:12px;border:1px solid rgba(35,62,82,.16);background:rgba(255,255,255,.85);color:#183247;font:600 14px Hind}
+.voice-actions #voice-stop{color:#183247!important}
+@media(max-width:700px){.voice-saathi{padding:22px 18px!important}.voice-head{align-items:flex-start;flex-direction:column}.voice-status{align-items:flex-start}.voice-console{flex-direction:column;gap:20px;padding:22px}.voice-copy{text-align:center}.voice-reply,.voice-transcript{text-align:left}.voice-orb-wrap{width:170px;height:170px}.voice-orb{width:120px;height:120px}}
