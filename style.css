@@ -762,3 +762,15 @@ footer {
   place-items:center;
 }
 .chain small { display:block; color:var(--mut); }
+/* White government presentation for Citizen Tools */
+:root{--bg:#fff!important;--paper:#fff!important;--paper2:#f5f8fb!important;--ink:#17324d!important;--muted:#647487!important;--line:#dfe7ee!important;--orange:#e87817!important;--orange2:#fff0e1!important;--green:#2f7d58!important;--green2:#e6f4ec!important;--blue:#1d5d9b!important;--blue2:#e8f2fa!important}
+html,body{background:#fff!important;color:#17324d!important}
+body{font-family:"Hind","Noto Sans Devanagari",Arial,sans-serif!important}
+body:before,body:after{display:none!important}
+.topbar,.card,.panel,.glass,.modal,.voice-sheet,.auth-card,.upload-card,.evidence-card,.authority-card{
+ background:#fff!important;color:#17324d!important;border-color:#dfe7ee!important;box-shadow:0 10px 30px rgba(24,58,88,.07)!important;
+}
+button.primary,.primary,.submit-btn{background:#1d5d9b!important;color:#fff!important}
+button.secondary,.secondary{background:#fff!important;color:#1d5d9b!important;border:1px solid #cbd8e4!important}
+h1,h2,h3,h4,b,strong{color:#17324d}
+small,.muted,p{color:#647487}
