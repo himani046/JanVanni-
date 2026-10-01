@@ -152,8 +152,8 @@
   <div class="voice-stage-large"><div class="wave" id="wave"></div><button class="listen-orb" id="listenOrb"><span>🎙</span><b id="listenLabel">बोलें</b><small id="listenHint">Tap & speak</small></button></div>
   <div class="voice-panels"><div><small>YOU SAID • आपने कहा</small><p id="heardText">“बोलने के लिए बटन दबाएँ।”</p></div><div class="reply-panel"><small>SAATHI SPEAKS • साथी बोल रहा है</small><p id="spokenText">मैं आपकी शिकायत की स्थिति, विभाग और अगले action की जानकारी दे सकता हूँ.</p><span id="voiceStatus">● Ready</span></div></div>
   <div class="voice-suggestions"><button data-say="मेरी रिपोर्ट दर्ज करी थी, उसकी क्या स्थिति है?">“मेरी रिपोर्ट की क्या स्थिति है?”</button><button data-say="मेरी शिकायत का समाधान कब तक होगा?">“कब तक समाधान होगा?”</button><button data-say="कौन सा विभाग मेरी शिकायत देख रहा है?">“कौन सा विभाग देख रहा है?”</button></div>
-  <div class="voice-controls"><select id="voiceLanguage"><option value="hi-IN">हिंदी आवाज़</option><option value="en-IN">English voice</option></select><button id="repeatVoice">↻ फिर सुनें</button><button id="stopVoice">■ रोकें</button></div>
-  <p class="voice-foot">Microphone permission दें. Production में यही layer Indic ASR + neural TTS providers से connect की जा सकती है.</p>
+  <div class="voice-controls"><select id="voiceLanguage"><option value="hi-IN">हिंदी • Hindi</option><option value="en-IN">English</option><option value="mal-IN">मालवी / Malvi</option><option value="bnd-IN">बुंदेलखंडी / Bundelkhandi</option><option value="nim-IN">निमाड़ी / Nimadi</option><option value="bag-IN">बघेली / Bagheli</option><option value="gon-IN">गोंडी / Gondi</option></select><button id="repeatVoice">↻ फिर सुनें</button><button id="stopVoice">■ रोकें</button></div>
+  <p class="voice-foot">Hindi, English, Malvi/Malwai, Bundelkhandi, Nimadi, Bagheli और Gondi target voice modes. Production में dialect-specific ASR/TTS adapters से natural local speech connect होगी.</p>
 </div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
