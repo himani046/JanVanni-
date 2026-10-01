@@ -792,3 +792,15 @@ footer {
 .tag {
   font-size: calc(1em + 3px) !important;
 }
+
+/* Requested labels: +1px and bold */
+.eye,
+.badge,
+.kicker,
+.hero .kicker,
+.nav-kicker,
+.status,
+.tag {
+  font-size: calc(1em + 4px) !important;
+  font-weight: 700 !important;
+}
