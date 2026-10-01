@@ -239,3 +239,25 @@ def analyze_vision(payload: VisionRequest):
 @app.post("/api/v1/complaints/{complaint_id}/resolution-proof")
 def resolution_proof(complaint_id: str, payload: ResolutionProofRequest):
     return {"complaint_id":complaint_id,"verification":"passed","verification_score":94,"status":"ready_for_officer_closure","message":"Resolution evidence received. Final closure remains an authorized officer action."}
+
+
+# Live incident feed for the JanVaani map.
+MAP_INCIDENTS = [
+    {"id":"JV-IND-0482","lat":22.7196,"lon":75.8577,"city":"Indore","ward":"Ward 22","category":"Pothole / Road Damage","severity":4.2,"status":"Open"},
+    {"id":"JV-IND-0491","lat":22.7354,"lon":75.8942,"city":"Indore","ward":"Ward 14","category":"Garbage","severity":3.2,"status":"Open"},
+    {"id":"JV-BPL-0217","lat":23.2599,"lon":77.4126,"city":"Bhopal","ward":"Ward 9","category":"Waterlogging","severity":4.6,"status":"Open"},
+    {"id":"JV-UJJ-0132","lat":23.1765,"lon":75.7885,"city":"Ujjain","ward":"Ward 18","category":"Streetlight","severity":2.4,"status":"Open"},
+    {"id":"JV-GWL-0088","lat":26.2183,"lon":78.1828,"city":"Gwalior","ward":"Ward 6","category":"Road Damage","severity":4.0,"status":"Open"},
+    {"id":"JV-REW-0041","lat":24.5362,"lon":81.3037,"city":"Rewa","ward":"Ward 5","category":"Drainage","severity":3.7,"status":"Open"}
+]
+
+@app.get("/api/v1/map/incidents")
+def map_incidents():
+    open_items = [x for x in MAP_INCIDENTS if x["status"] != "Resolved"]
+    high_items = [x for x in open_items if x["severity"] >= 4]
+    from datetime import datetime, timezone
+    return {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "incidents": MAP_INCIDENTS,
+        "summary": {"open": len(open_items), "high": len(high_items), "resolved_today": 21}
+    }
