@@ -850,3 +850,17 @@ footer {
 .voice-actions select{padding:12px 15px;border-radius:12px;border:1px solid rgba(35,62,82,.16);background:rgba(255,255,255,.85);color:#183247;font:600 14px Hind}
 .voice-actions #voice-stop{color:#183247!important}
 @media(max-width:700px){.voice-saathi{padding:22px 18px!important}.voice-head{align-items:flex-start;flex-direction:column}.voice-status{align-items:flex-start}.voice-console{flex-direction:column;gap:20px;padding:22px}.voice-copy{text-align:center}.voice-reply,.voice-transcript{text-align:left}.voice-orb-wrap{width:170px;height:170px}.voice-orb{width:120px;height:120px}}
+
+/* LIVE JANVAANI MAP */
+.live-map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 10px;flex-wrap:wrap}
+.map-legend,.map-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.map-legend span{font-size:13px;color:#435865;display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.legend-dot.high{background:#e74c3c}.legend-dot.medium{background:#e67e22}.legend-dot.low{background:#168a68}.legend-dot.you{background:#37d6a0;border:2px solid #168a68}
+.live-map-wrap{position:relative;border:1px solid rgba(35,62,82,.16);border-radius:20px;overflow:hidden;background:#e8eef2;box-shadow:0 18px 45px rgba(31,55,70,.10)}
+.live-map{height:520px;width:100%;z-index:1}
+.map-status{position:absolute;z-index:500;left:14px;bottom:14px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.92);border:1px solid rgba(35,62,82,.14);color:#435865;font-size:12px;box-shadow:0 4px 14px rgba(31,55,70,.12)}
+.map-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.map-summary .card{padding:16px}.map-summary b{display:block;font:800 30px 'Bricolage Grotesque';color:#183247}.map-summary small{color:#5c6d79}
+.leaflet-container{font-family:Hind,sans-serif}
+@media(max-width:700px){.live-map{height:420px}.map-summary{grid-template-columns:1fr}}
